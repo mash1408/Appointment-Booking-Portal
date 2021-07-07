@@ -12,8 +12,11 @@
         {% block javascripts %}
             {#{{ encore_entry_script_tags('app') }}#}
         {% endblock %}
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
     </head>
-    <body>
+    
+    <body class="container">
         {% block body %}{% endblock %}
     </body>
 </html>
