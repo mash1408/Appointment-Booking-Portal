@@ -16,9 +16,18 @@
 		}
 	</style>
 
-
+<h2>Slots Generation Form</h2>
 {{ form_start(adminslot, {'attr': {'novalidate': 'novalidate'}}) }}
-    {# {{ form_row(adminslot.start_date) }} #}
+   {{form_label(adminslot.start_date, 'Start Date')}}
+    <br>  
+        {# {{ form_row(registrationForm.email,{'attr': {'class': 'mr-8'}}) }} #}
+        {{ form_widget(adminslot.start_date, {'attr': {'class': 'pl-8 border-b-2 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg'}}) }}
+        
+		{{form_label(adminslot.end_date, 'End Date')}}
+    <br>  
+        {# {{ form_row(registrationForm.email,{'attr': {'class': 'mr-8'}}) }} #}
+        {{ form_widget(adminslot.end_date, {'attr': {'class': 'pl-8 border-b-2 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg'}}) }}
+        
 {{ form_end(adminslot) }}
 
 {# {{lex}} #}
@@ -171,6 +180,13 @@
 	</div>
 
 	<script>
+		var yr = document.getElementById("form_start_date_year");
+		yr.value='2021';
+		//yr.setAttribute("read-only", "true");
+		var ye = document.getElementById("form_end_date_year");
+		//ye.setAttribute("read-only", "true");
+		ye.value='2021';
+		
 		const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -292,6 +308,8 @@
 				}
 			}
 		}
+
+		
 	</script>
   </div>
 
