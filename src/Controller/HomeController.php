@@ -10,10 +10,11 @@ use Doctrine\ORM\Mapping\Id;
 
 class HomeController extends AbstractController
 {
-    #[Route('/home', name: 'home')]
-    public function index(): Response
+    #[Route('/home/{date}', name: 'home')]
+    public function index($date = 'date'): Response
     {
-        $slots = $this->getDoctrine()->getRepository(Slot::class)->findAll();
+        $dateobj =  \DateTime::createFromFormat("Y-m-d",$date);
+        $slots = $this->getDoctrine()->getRepository(Slot::class)->findBy(['slot_date' => $dateobj]);
         // return $this->render('home/index.html.twig', [
         //     'controller_name' => 'HomeController',
         // ]);
