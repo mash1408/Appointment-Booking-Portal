@@ -4,10 +4,46 @@
 
 {% block body %}
     <div>
+        <select id="filter">
+            <option id="show-all" selected>Show all</option>
+            <option id="show-available">Show available</option>
+        </select>
         {% for slot in slots %}
+        
+        {% if slot[3] == 0 %}
+        <div id="all">
             <p>{{ slot[1] }}</p>
             <p>{{ slot[2] }}</p>
-            <p>{{ slot[3] }}</p>
+            <button>Book Slot</button>
+        </div>
+        {% endif %}
+
+        {% if slot[3] == 1 %}
+        <div id="booked">
+            <p>{{ slot[1] }}</p>
+            <p>{{ slot[2] }}</p>
+            <button>Book Slot</button>
+        </div>
+        {% endif %}
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    window.onload = function() {
+        //console.log(document.getElementById("show-available"));
+
+    document.getElementById("filter").addEventListener("change",function(event) {
+        if(event.target.value == "Show all"){
+            //console.log(document.getElementById("all"));
+            document.getElementById("booked").style.display = 'block';
+        }
+        if(event.target.value == "Show available"){
+            //console.log(document.getElementById("booked"));
+            document.getElementById("booked").style.display = 'none';
+        }
+    });
+    }
+</script>
 {% endblock %}
