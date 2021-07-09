@@ -35,7 +35,12 @@
 
 {# pass slot data to javascript inorder to be able to access them  #}
 {% for slot in slots %}
-    <a  data-entry-id="{{ slot.booked }}"></a>
+{% set entryInfo={
+	id: slot.id,
+	booked: slot.booked,
+	dateDay: slot.slotdate|date('d')
+}%}
+    <a  data-entry-info="{{ entryInfo|json_encode }}"></a>
 {% endfor %}
 
 <div class="antialiased sans-serif bg-gray-100 h-screen">
@@ -98,17 +103,53 @@
 						</template>	
 						<template x-for="(date, dateIndex) in no_of_days" :key="dateIndex">	
 							<div style="width: 14.28%; height: 120px" class="px-4 pt-2 border-r border-b relative">
-								<div  class="relative z-30 inline-flex">
+							{# <div  class="relative z-30 inline-flex"> #}
+								
 								<div
 									@click="showEventModal(date.day)"
 									x-text="date.day"
 									
-									class="inline-flex w-6 h-6 items-center justify-center cursor-pointer text-center leading-none rounded-full transition ease-in-out duration-100"
+									class=" inline-flex w-6 h-6 items-center justify-center cursor-pointer text-center leading-none rounded-full transition ease-in-out duration-100"
 									:class="{'bg-blue-500 text-white': isToday(date.day) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }"	
 								></div>
-				   				<span x-on:mouseover="date.openEventPopup = true" 
-									x-on:mouseleave="date.openEventPopup = false" style="height: 25px;width: 50px; background-color: yellow;border-radius: 25%;display: inline-block;">slots</span>
-								<div class="relative" x-cloak x-show.transition.origin.top="date.openEventPopup">
+
+<div style="height: 80px;" class="overflow-y-auto mt-1" >
+						
+									<div 
+										class="absolute top-0 right-10 mt-2 mr-2 inline-flex 
+										items-center justify-center rounded-full text-sm w-6 h-6  
+										 leading-none"
+										 x-text="getSlotsBooked(date.day)"
+										style="border: 2px solid #73AD21;"
+										
+										></div>
+						
+										<div 
+										style="border: 2px solid red;"
+										x-text="getSlotsUnBooked(date.day)"
+										class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center 
+										justify-center rounded-full text-sm w-6 h-6  
+										 leading-none"
+										>
+										</div>
+
+</div>
+
+
+
+
+
+				   				{# <div x-on:mouseover="date.openEventPopup = true" 
+									x-on:mouseleave="date.openEventPopup = false" 
+									class=" ml-24 mt-0"
+									style="height: 25px;width: 25px; border: 2px solid #73AD21;border-radius: 50%;"></div> #}
+									
+								{# <div x-on:mouseover="date.openEventPopup = true" 
+									x-on:mouseleave="date.openEventPopup = false" 
+									class=" ml-14"
+									style="height: 25px;width: 25px; border: 2px solid #73AD21;border-radius: 50%;"></div> #}
+									
+								{# <div class="relative" x-cloak x-show.transition.origin.top="date.openEventPopup">
 									<div  style="background-color:#e2e8f0; z-index:1000;" class="absolute top-0 z-10 w-32 p-2 -mt-1 text-sm leading-tight text-white transform -translate-x-1/2 -translate-y-full  rounded-lg shadow-lg">
 									{% for slot in slots %}
 									
@@ -126,7 +167,7 @@
 									<svg   class="absolute z-10 w-12 h-6 text-gray-300 transform -translate-x-12 -translate-y-3 fill-current stroke-current" width="8" height="8">
 										<rect x="12" y="-10" width="8" height="8" transform="rotate(45)" />
 									</svg>
-								</div>
+								</div> #}
 
 
 
@@ -156,6 +197,7 @@
 										</div>
 									</template>
 								</div>
+
 							</div>
 						</template>
 					</div>
@@ -216,6 +258,39 @@
 </div>
 
 	<script>
+				var entryIds=[]
+					 const entryElements =
+						document.querySelectorAll('[data-entry-info]');
+			
+					// Map over each element and extract the data value
+					entryIds =
+						Array.from(entryElements).map(
+							item => JSON.parse(item.dataset.entryInfo)
+						);
+						
+	
+			function	getSlotsBooked(day){
+				
+					var slotsBooked=0
+					entryIds.forEach((element) => { 
+						if(parseInt(element.dateDay) === day && parseInt(element.booked))
+							slotsBooked+=1
+					 } )
+					return slotsBooked
+				}
+					
+			function	getSlotsUnBooked(day){
+				
+					var slotsUnBooked=0
+					entryIds.forEach((element) => { 
+						if(  parseInt(element.dateDay)===day && !parseInt(element.booked))
+							slotsUnBooked+=1
+					 } )
+					 
+					return slotsUnBooked
+				}
+
+
 
 		var yr = document.getElementById("form_start_date_year");
 		yr.value='2021';
@@ -245,6 +320,7 @@
 			return {
 				month: '',
 				year: '',
+				slots: 0,
 				no_of_days: [],
 				blankdays: [],
 				event_day:0,
@@ -303,23 +379,10 @@
 					this.month = today.getMonth();
 					this.year = today.getFullYear();
 					this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString();
-						document.addEventListener('DOMContentLoaded', function() {
-					console.log('loaded')
-					 const entryElements =
-						document.querySelectorAll('[data-entry-id]');
-
-					// Map over each element and extract the data value
-					const entryIds =
-						Array.from(entryElements).map(
-							item => item.dataset.entryId
-						);
-					this.isBooked=entryIds;
-					// You'll now have an array containing string values
-					console.log(this.isBooked);	
-					
-					})
+						
 
 				},
+				
 
 				isToday(date) {
 					const today = new Date();
