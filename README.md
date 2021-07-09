@@ -22,4 +22,6 @@ Now you are good to go
 ```
 symfony server:start
 ```
-End
+
+## Admin Credentials
+Email: admin@admin.com | Password: password
