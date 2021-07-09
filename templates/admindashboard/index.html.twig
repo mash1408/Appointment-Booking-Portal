@@ -3,7 +3,6 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block body %}
-<div>
 
 	<link rel="dns-prefetch" href="//unpkg.com" />
 	<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
@@ -16,21 +15,26 @@
 		}
 	</style>
 
-<h2>Slots Generation Form</h2>
+	<div class="container mx-auto px-4 py-2 text-center w-1/2">
+<h2 class="title-font sm:text-4xl text-2xl mb-4 font-medium text-blue-900">Slots Generation Form</h2>
 {{ form_start(adminslot, {'attr': {'novalidate': 'novalidate'}}) }}
+<div class="container border-l-3 border-blue-600">
    {{form_label(adminslot.start_date, 'Start Date')}}
-    <br>  
         {# {{ form_row(registrationForm.email,{'attr': {'class': 'mr-8'}}) }} #}
-        {{ form_widget(adminslot.start_date, {'attr': {'class': 'pl-8 border-b-2 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg'}}) }}
-        
+        {{ form_widget(adminslot.start_date, {'attr': {'class': 'mb-3  sm:mx-auto md:mx-44 lg:mx-52 pl-5 lg:w-1/2 xl:w-1/3 w-auto  border-b-2 rounded-lg border-purple-500 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg'}}) }}
+    
 		{{form_label(adminslot.end_date, 'End Date')}}
-    <br>  
         {# {{ form_row(registrationForm.email,{'attr': {'class': 'mr-8'}}) }} #}
-        {{ form_widget(adminslot.end_date, {'attr': {'class': 'pl-8 border-b-2 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg'}}) }}
-        
+        {{ form_widget(adminslot.end_date, {'attr': {'class': 'pl-5 mb-3  sm:mx-auto md:mx-44 lg:mx-52 lg:w-1/2 xl:w-1/3 w-auto  border-b-2 rounded-lg border-purple-500 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg'}}) }}
+</div>
 {{ form_end(adminslot) }}
+</div>  
+
+
+
 
 {# {{lex}} #}
+
 <div class="antialiased sans-serif bg-gray-100 h-screen">
 	<div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
 		<div class="container mx-auto px-4 py-2 md:py-24">
@@ -69,7 +73,7 @@
 							</svg>									  
 						</button>
 					</div>
-				</div>	
+				</div>
 
 				<div class="-mx-1 -mb-1">
 					<div class="flex flex-wrap" style="margin-bottom: -40px;">
@@ -124,6 +128,7 @@
 				</div>
 			</div>
 		</div>
+		
 
 		<!-- Modal -->
 		<div style=" background-color: rgba(0, 0, 0, 0.8)" class="fixed z-40 top-0 right-0 left-0 bottom-0 h-full w-full" x-show.transition.opacity="openEventModal">
@@ -131,8 +136,8 @@
 				<div class="shadow absolute right-0 top-0 w-10 h-10 rounded-full bg-white text-gray-500 hover:text-gray-800 inline-flex items-center justify-center cursor-pointer"
 					x-on:click="openEventModal = !openEventModal">
 					<svg class="fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-						<path
-							d="M16.192 6.344L11.949 10.586 7.707 6.344 6.293 7.758 10.535 12 6.293 16.242 7.707 17.656 11.949 13.414 16.192 17.656 17.606 16.242 13.364 12 17.606 7.758z" />
+						<path 
+						d="M16.192 6.344L11.949 10.586 7.707 6.344 6.293 7.758 10.535 12 6.293 16.242 7.707 17.656 11.949 13.414 16.192 17.656 17.606 16.242 13.364 12 17.606 7.758z" />
 					</svg>
 				</div>
 
@@ -186,7 +191,21 @@
 		var ye = document.getElementById("form_end_date_year");
 		//ye.setAttribute("read-only", "true");
 		ye.value='2021';
-		
+		var starttime = document.getElementById("form_start_time");
+		starttime.classList.add("text-center","mx-10","mb-3","px-4", "lg:w-1/2", "xl:w-1/3", "w-auto",  "border-b-2", "rounded-lg","border-blue-500", "font-display","focus:outline-none","focus:border-primarycolor","transition-all","duration-500","text-lg","sm:mx-auto", "md:mx-44", "lg:mx-52");
+		var endtime = document.getElementById("form_end_time");
+		endtime.classList.add("text-center","mx-10","px-4","lg:w-1/2", "xl:w-1/3", "w-auto", "border-b-2", "rounded-lg","border-blue-500", "font-display","focus:outline-none","focus:border-primarycolor","transition-all","duration-500","text-lg","sm:mx-auto", "md:mx-44", "lg:mx-52");
+		{# var savebutton= #}
+		document.getElementById("form_save").classList.add("bg-blue-500","hover:bg-blue-700","text-white","font-bold","py-1","px-4","rounded","mt-2");
+		var labels=document.getElementsByTagName("label");
+		var length = labels.length;
+		for (var i = 0; i < 4; i++) {
+			labels[i].classList.add("block","text-lg","font-bold","mb-2");
+		}
+		labels[0].classList.add("text-purple-600");
+		labels[1].classList.add("text-purple-600");
+		labels[2].classList.add("text-blue-600");
+		labels[3].classList.add("text-blue-600");
 		const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
