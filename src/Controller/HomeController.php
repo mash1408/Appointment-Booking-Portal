@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Form\BookingFormType;
 use App\Entity\Slot;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -34,8 +35,25 @@ class HomeController extends AbstractController
     }
 
     #[Route('/home/{date}', name: 'slotlist')]
-    public function index($date = 'date'): Response
+    public function index(Request $request, $date = 'date'): Response
     {
+        $Slot = new Slot();
+       
+        $form = $this->createForm(BookingFormType::class, $Slot);
+        
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            dd($form->getData());
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($Slot);
+            $entityManager->flush();
+
+            return new Response('Appointment booked....');
+        }
+
+
         $dateobj =  \DateTime::createFromFormat("Y-m-d",$date);
         $slots = $this->getDoctrine()->getRepository(Slot::class)->findBy(['slot_date' => $dateobj]);
         // return $this->render('home/index.html.twig', [
@@ -48,6 +66,6 @@ class HomeController extends AbstractController
             array_push($slotArray, [$slot->getId(),$slot->getSlotDate()->format('Y-m-d'), $slot->getSlotTime()->format('H:i'), $slot->getBooked()]);
         }
 
-        return $this->render('home/index.html.twig', ['slots' => $slotArray]);
+        return $this->render('home/index.html.twig', ['slots' => $slotArray, 'booking_form' => $form->createView()]);
     }
 }
