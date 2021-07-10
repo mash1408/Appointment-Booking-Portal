@@ -226,8 +226,11 @@ class AdmindashboardController extends AbstractController
         ////////////////////////////
        
     }
+    //get all the slots from db
+    $slots=$this->getDoctrine()->getRepository(Slot::class)->findAll();
         return $this->render('admindashboard/index.html.twig', [
             'adminslot' => $form->createView(),
+            'slots' => $slots
     ]);
 }
 }
