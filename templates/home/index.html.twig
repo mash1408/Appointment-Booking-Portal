@@ -3,18 +3,80 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div>
+        <select id="filter">
+            <option id="show-all" selected>Show all</option>
+            <option id="show-available">Show available</option>
+        </select>
+        {% for slot in slots %}
+        
+        {% if slot[3] == 0 %}
+        <div id="all">
+            <p>{{ slot[1] }}</p>
+            <p>{{ slot[2] }}</p>
+            <a href="/book/{{slot[0]}}/{{app.user.id}}">Book slot</a>
+            {# <button data-id="{{ slot[0] }}" class="book-slot" value={{ slot[0] }}>Book Slot</button> #}
+        </div>
+        {% endif %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        {% if slot[3] == 1 %}
+        <div id="booked">
+            <p>{{ slot[1] }}</p>
+            <p>{{ slot[2] }}</p>
+            <button>Book Slot</button>
+        </div>
+        {% endif %}
+        {% endfor %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/SRINIVASS TALAULIKAR/Desktop/Appointment Portal/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/SRINIVASS TALAULIKAR/Desktop/Appointment Portal/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
-</div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    window.onload = function() {
+        //console.log(document.getElementById("show-available"));
+
+    document.getElementById("filter").addEventListener("change",function(event) {
+        if(event.target.value == "Show all"){
+            //console.log(document.getElementById("all"));
+            document.getElementById("booked").style.display = 'block';
+        }
+        if(event.target.value == "Show available"){
+            //console.log(document.getElementById("booked"));
+            document.getElementById("booked").style.display = 'none';
+        }
+    });
+    console.log()
+
+    /*if (slots) {
+        slots.addEventListener('click', e => {
+          if (e.target.className === 'book-slot') {
+            if (confirm('Are you sure?')) {
+                const id = e.target.getAttribute('data-id');
+                // alert(id);
+                fetch(`/article/delete/${id}`, {
+                    method: 'DELETE'
+                }).then(res => window.location.reload());
+            }
+          }
+        });
+    }*/
+    var buttons = document.getElementsByClassName("book-slot");
+
+    for(let i=0; i<buttons.length; i++){
+        buttons[i].addEventListener('click', (e)=>{
+           console.log(e.target.getAttribute('data-id'))
+           const id = e.target.getAttribute('data-id');
+           fetch(`/book/${id}`,{
+               method: 'GET'
+           }).then(res => window.location.reload(`/book/${id}`))
+        });
+    }
+    /*buttons.forEach(element => {
+        element.addEventListner('click', (e)=>{
+            console.log('someone hit me');
+        });
+    });*/
+    }
+</script>
 {% endblock %}
