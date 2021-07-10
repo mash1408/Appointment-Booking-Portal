@@ -30,7 +30,8 @@
 {{ form_end(adminslot) }}
 </div>  
 
-
+<div id="test" class="test">
+					</div>
 
 
 {# pass slot data to javascript inorder to be able to access them  #}
@@ -38,7 +39,8 @@
 {% set entryInfo={
 	id: slot.id,
 	booked: slot.booked,
-	dateDay: slot.slotdate|date('d')
+	dateDay: slot.slotdate|date('d'),
+	dateMonth: slot.slotdate|date('m')
 }%}
     <a  data-entry-info="{{ entryInfo|json_encode }}"></a>
 {% endfor %}
@@ -227,6 +229,7 @@
 						<template x-if="{{slot.slotdate| date('d')}} == event_day && (month+1) == {{slot.slotdate| date('m')}}">
 						<div>
 							<div class="mt-4 justify-around border-2 border-gray-200 rounded-lg  text-gray-700 bg-gray-200">
+							
 							{{slot.slottime|date('H:i:s')}}
 							<button type="button" class="bg-gray-800 hover:bg-gray-700 
 							text-white font-semibold py-2 px-4 border border-gray-700 
@@ -240,6 +243,7 @@
 							{% if slot.booked is same as("1") %}
 								<p>Booked</p>
 							{% endif %}
+							</div>
 						</div>
 
 						</template>
@@ -250,7 +254,7 @@
 
 						{# <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" type="text" x-model="event_title"> #}
 					</div>
-
+					
 					<div class="mb-4">
 						<label class="text-gray-800 block mb-1 font-bold text-sm tracking-wide">Event date</label>
 						<input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" type="text" x-model="event_date" readonly>
@@ -266,37 +270,16 @@
 </div>
 
 	<script>
-				var entryIds=[]
-					 const entryElements =
-						document.querySelectorAll('[data-entry-info]');
-			
-					// Map over each element and extract the data value
-					entryIds =
-						Array.from(entryElements).map(
-							item => JSON.parse(item.dataset.entryInfo)
-						);
-						
-	
-			function	getSlotsBooked(day){
-				
-					var slotsBooked=0
-					entryIds.forEach((element) => { 
-						if(parseInt(element.dateDay) === day && parseInt(element.booked))
-							slotsBooked+=1
-					 } )
-					return slotsBooked
-				}
-					
-			function	getSlotsUnBooked(day){
-				
-					var slotsUnBooked=0
-					entryIds.forEach((element) => { 
-						if(  parseInt(element.dateDay)===day && !parseInt(element.booked))
-							slotsUnBooked+=1
-					 } )
-					 
-					return slotsUnBooked
-				}
+		
+
+	var entryIds=[]
+	const entryElements =document.querySelectorAll('[data-entry-info]');
+	// Map over each element and extract the data value
+	entryIds =Array.from(entryElements).map(
+				item => JSON.parse(item.dataset.entryInfo)
+			);
+		
+
 				function deleteSlot(id){
 					 
 					return slotsUnBooked
@@ -391,8 +374,29 @@
 					this.month = today.getMonth();
 					this.year = today.getFullYear();
 					this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString();
-						
+						console.log(entryIds)
 
+				},
+				getSlotsBooked(day){
+				
+					var slotsBooked=0
+					entryIds.forEach((element) => { 
+						if(parseInt(element.dateDay) === day  && parseInt(element.booked))
+							slotsBooked+=1
+					 } )
+					return slotsBooked
+				},
+					
+				getSlotsUnBooked(day){
+				
+					var slotsUnBooked=0
+					entryIds.forEach((element) => { 
+						
+						if(  parseInt(element.dateDay)===day && parseInt(element.dateMonth) === (this.month+1) && !parseInt(element.booked))
+							slotsUnBooked+=1
+			  		 } )
+					 
+					return slotsUnBooked
 				},
 				
 
@@ -408,6 +412,7 @@
 					this.openEventModal = true;
 					this.event_date = new Date(this.year, this.month, date).toDateString();
 					this.event_day=date;
+					this.showSlots()
 				},
 
 				addEvent() {
@@ -452,6 +457,32 @@
 					console.log(JSON.stringify(this.no_of_days))
 					this.blankdays = blankdaysArray;
 					
+				},
+				//async method to display slots without requiring page refresh
+				showSlots(){
+						const element = document.getElementById("test");
+						{% for slot in slots %}
+							if({{slot.slotdate| date('d')}} == this.event_day && (this.month+1) == {{slot.slotdate| date('m')}}){
+
+							var newDiv = document.createElement("div");
+								//element.appendChild(newDiv)
+								var innerDiv = document.createElement("div");
+									newDiv.appendChild(innerDiv)
+										innerDiv.className="mt-4 justify-around border-2 border-gray-200 rounded-lg  text-gray-700 bg-gray-200"
+										var text = document.createTextNode("{{slot.slottime|date('H:i:s')}}");
+										var del = document.createElement("button");
+										del.className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 border border-gray-700 rounded-lg shadow-sm"
+										del.value="delete"
+										//event listener for delete buttons
+										del.addEventListener("click", () => {
+											console.log("clicked element");
+										});
+										innerDiv.appendChild(text)
+										innerDiv.appendChild(del)
+
+							}
+						{% endfor %}
+
 				}
 			}
 		}
