@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\SlotRepository;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * @ORM\Entity(repositoryClass=SlotRepository::class)
@@ -38,7 +39,7 @@ class Slot
     private $category;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="slot")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;

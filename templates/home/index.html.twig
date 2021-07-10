@@ -14,7 +14,8 @@
         <div id="all">
             <p>{{ slot[1] }}</p>
             <p>{{ slot[2] }}</p>
-            <button class="book-slot" value={{ slot[0] }}>Book Slot</button>
+            <a href="/book/{{slot[0]}}/{{app.user.id}}">Book slot</a>
+            {# <button data-id="{{ slot[0] }}" class="book-slot" value={{ slot[0] }}>Book Slot</button> #}
         </div>
         {% endif %}
 
@@ -26,11 +27,8 @@
         </div>
         {% endif %}
         {% endfor %}
-    </div>
 
-    {{ form_start(booking_form) }}
-    {{ form_widget(booking_form) }}
-    {{ form_end(booking_form) }}
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -48,28 +46,37 @@
             document.getElementById("booked").style.display = 'none';
         }
     });
+    console.log()
 
+    /*if (slots) {
+        slots.addEventListener('click', e => {
+          if (e.target.className === 'book-slot') {
+            if (confirm('Are you sure?')) {
+                const id = e.target.getAttribute('data-id');
+                // alert(id);
+                fetch(`/article/delete/${id}`, {
+                    method: 'DELETE'
+                }).then(res => window.location.reload());
+            }
+          }
+        });
+    }*/
     var buttons = document.getElementsByClassName("book-slot");
 
     for(let i=0; i<buttons.length; i++){
         buttons[i].addEventListener('click', (e)=>{
-            var id = parseInt(e.target.value);
-             console.log(parseInt(e.target.value));
-             document.getElementById("booking_form_Id").value = id;
-             console.log(typeof(id));
-             var date = e.target.previousElementSibling.previousElementSibling.innerHTML;
-             var time = e.target.previousElementSibling.innerHTML;
-
-             //document.getElementById("booking_form_slot_date_month").value= date;
-
-             console.log(date,time);
+           console.log(e.target.getAttribute('data-id'))
+           const id = e.target.getAttribute('data-id');
+           fetch(`/book/${id}`,{
+               method: 'GET'
+           }).then(res => window.location.reload(`/book/${id}`))
         });
     }
-    //buttons.forEach(element => {
-     //   element.addEventListner('click', (e)=>{
-      //      console.log('someone hit me');
-     //   });
-   // });
+    /*buttons.forEach(element => {
+        element.addEventListner('click', (e)=>{
+            console.log('someone hit me');
+        });
+    });*/
     }
 </script>
 {% endblock %}
