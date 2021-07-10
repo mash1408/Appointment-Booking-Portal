@@ -39,8 +39,7 @@ class Slot
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="slot")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity=User::class)
      */
     private $user;
 

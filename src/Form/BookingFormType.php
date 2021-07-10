@@ -24,6 +24,7 @@ class BookingFormType extends AbstractType
             ->add('category',ChoiceType::class,['choices' => [
                 'Haircut' => 'Haircut',
                 'Shaving' => 'Shaving',
+                'Massage' => 'Massage',
             ],
             'label' => 'Select a service...',])
             ->add('save',SubmitType::class)
