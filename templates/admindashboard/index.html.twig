@@ -53,7 +53,7 @@
                 Slots
 			</div>
 
-			<div class="bg-white rounded-lg shadow overflow-hidden">
+			<div class="bg-white rounded-lg overflow-hidden shadow-2xl">
 
 				<div class="flex items-center justify-between py-2 px-6">
 					<div>
@@ -100,12 +100,12 @@
 						<template x-for="blankday in blankdays">
 							<div 
 								style="width: 14.28%; height: 120px"
-								class="text-center border-r border-b px-4 pt-2"	
+								class="text-center border-r border-b px-4 pt-2 "	
 							></div>
 						</template>	
 						<template x-for="(date, dateIndex) in no_of_days" :key="dateIndex">	
 						
-							<div style="width: 14.28%; height: 120px" class="px-4 pt-2 border-r border-b relative transition ease-in-out duration-100 delay-100"
+							<div style="width: 14.28%; height: 120px" class=" px-4 pt-2 border-r border-b relative transition ease-in-out duration-100 delay-100"
 																		:class="{'bg-red-200 border-gray-500' : date.unbooked === 0 && date.booked !== 0, 'bg-green-200 border-gray-500' : date.unbooked!== 0}">
 
 								<div
@@ -113,7 +113,7 @@
 									x-text="date.day"
 									
 									class=" inline-flex w-6 h-6 items-center justify-center cursor-pointer text-center leading-none rounded-full transition ease-in-out duration-100"
-									:class="{'bg-blue-500 text-white': isToday(date.day) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }"	
+									:class="{'bg-blue-400 text-white': isToday(date.day) == true, 'hover:bg-blue-200': isToday(date) == false }"	
 								></div>
 
 								<div style="height: 80px;" class="overflow-y-auto mt-1 cursor-pointer" 
