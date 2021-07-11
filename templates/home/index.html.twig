@@ -3,30 +3,46 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-    <div>
-        <select id="filter">
+    <div class="container">
+        <div class="flex justify-center">
+        {% set dateTime = date(slots[0][1]) %}
+        <span class="day text-4xl font-bold m-1">Slots for </span>
+        <span class="day text-4xl font-bold m-1">{{ dateTime | date('d') }}</span>
+        <span class="month text-4xl font-bold m-1">{{ dateTime | date('F') }}</span>
+        <span class="year text-4xl font-bold m-1">{{ dateTime | date('Y') }}</span>
+        </div>
+
+        <div class="flex justify-center mt-5">
+        <select id="filter" class="form-select mt-1 block border border-2 text-xl">
             <option id="show-all" selected>Show all</option>
             <option id="show-available">Show available</option>
         </select>
-        {% for slot in slots %}
+        </div>
         
-        {% if slot[3] == 0 %}
-        <div id="all">
-            <p>{{ slot[1] }}</p>
-            <p>{{ slot[2] }}</p>
-            <a href="/book/{{slot[0]}}/{{app.user.id}}">Book slot</a>
-            {# <button data-id="{{ slot[0] }}" class="book-slot" value={{ slot[0] }}>Book Slot</button> #}
+         <section class="text-gray-600 body-font">
+            <div class="container px-5 py-24 mx-auto">
+                <div class="flex flex-wrap gap-5 -m-2 justify-center">
+        {% for slot in slots %}
+         {% if slot[3] == 0 %}
+        <div class="all h-full bg-green-400 text-white bg-white border-gray-200 border p-4 rounded-lg shadow-2xl">
+                <p class="text-2xl font-semibold m-1 mb-5">Time: {{ slot[2] }}</p>
+                <a href="/book/{{slot[0]}}/{{app.user.id}}" class="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Book slot</a>
+                {# <button data-id="{{ slot[0] }}" class="book-slot" value={{ slot[0] }}>Book Slot</button> #}
         </div>
         {% endif %}
 
         {% if slot[3] == 1 %}
-        <div id="booked">
-            <p>{{ slot[1] }}</p>
-            <p>{{ slot[2] }}</p>
-            <button>Book Slot</button>
+        <div class="booked h-full bg-red-500 text-white border-gray-200 border p-4 rounded-lg shadow-2xl">
+                <p class="text-2xl font-semibold m-1">Time: {{ slot[2] }}</p>
+                <p class="text-2xl text-gray-300 font-semibold m-1">Booked</p>
+                {# <button data-id="{{ slot[0] }}" class="book-slot" value={{ slot[0] }}>Book Slot</button> #}
         </div>
         {% endif %}
+
         {% endfor %}
+        </div>
+        </div>
+        </section>
 
     </div>
 {% endblock %}
@@ -39,11 +55,14 @@
     document.getElementById("filter").addEventListener("change",function(event) {
         if(event.target.value == "Show all"){
             //console.log(document.getElementById("all"));
-            document.getElementById("booked").style.display = 'block';
+            for(let i=0; i< document.querySelectorAll(".booked").length; i++){
+                document.querySelectorAll(".booked")[i].style.display = 'block';
+            }
         }
         if(event.target.value == "Show available"){
-            //console.log(document.getElementById("booked"));
-            document.getElementById("booked").style.display = 'none';
+            for(let i=0; i< document.querySelectorAll(".booked").length; i++){
+                document.querySelectorAll(".booked")[i].style.display = 'none';
+            }
         }
     });
     console.log()
