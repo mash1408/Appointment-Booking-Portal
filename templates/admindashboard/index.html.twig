@@ -104,8 +104,11 @@
 							></div>
 						</template>	
 						<template x-for="(date, dateIndex) in no_of_days" :key="dateIndex">	
-							<div style="width: 14.28%; height: 120px" class="px-4 pt-2 border-r border-b relative">
-							{# <div  class="relative z-30 inline-flex"> #}
+							<div style="width: 14.28%; height: 120px" class="px-4 pt-2 border-r border-b relative"
+																		:class="{'bg-red-200 border-gray-500' : getSlotsUnBooked(date.day) === 0 && getSlotsBooked(date.day) !== 0, 'bg-green-200 border-gray-500' : getSlotsUnBooked(date.day) !== 0}">
+
+
+							
 								
 								<div
 									@click="showEventModal(date.day)"
@@ -115,19 +118,19 @@
 									:class="{'bg-blue-500 text-white': isToday(date.day) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }"	
 								></div>
 
-<div style="height: 80px;" class="overflow-y-auto mt-1" >
+								<div style="height: 80px;" class="overflow-y-auto mt-1" >
 						
 									<div 
 										class="absolute top-0 right-10 mt-2 mr-2 inline-flex 
 										items-center justify-center rounded-full text-sm w-6 h-6  
 										 leading-none"
-										 x-text="getSlotsBooked(date.day)"
-										style="border: 2px solid #73AD21;"
+										 x-text="getSlotsBooked(date.day,this)"
+										style="border: 2px solid red;"
 										
 										></div>
 						
 										<div 
-										style="border: 2px solid red;"
+										style="border: 2px solid  #73AD21;"
 										x-text="getSlotsUnBooked(date.day)"
 										class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center 
 										justify-center rounded-full text-sm w-6 h-6  
@@ -270,6 +273,12 @@
 </div>
 
 	<script>
+	window.addEventListener('load', (event) => {
+    console.log('The page has fully loaded');
+	let elements = document.getElementsByClassName('dates');
+	console.log(elements)
+	
+});
 		
 
 	var entryIds=[]
@@ -375,15 +384,29 @@
 					this.year = today.getFullYear();
 					this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString();
 						console.log(entryIds)
+					
+				},
+				changeColorOfDate(day){
+					let dates = document.getElementsByClassName('dates');
+					for (let date of dates) {
+						let firstElementChild = date.firstElementChild;
+						if(parseInt(firstElementChild.innerHTML) === day ){
+							date.style.backgroundColor = 'lightsteelblue';
+						}
+						
+						
+					}
+
 
 				},
 				getSlotsBooked(day){
 				
 					var slotsBooked=0
 					entryIds.forEach((element) => { 
-						if(parseInt(element.dateDay) === day  && parseInt(element.booked))
+						if(parseInt(element.dateDay) === day  && parseInt(element.dateMonth) === (this.month+1) && parseInt(element.booked))
 							slotsBooked+=1
 					 } )
+					
 					return slotsBooked
 				},
 					
@@ -438,6 +461,7 @@
 				},
 
 				getNoOfDays() {
+					
 					let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
 
 					// find where to start calendar day of week
@@ -460,6 +484,7 @@
 				},
 				//async method to display slots without requiring page refresh
 				showSlots(){
+					
 						const element = document.getElementById("test");
 						{% for slot in slots %}
 							if({{slot.slotdate| date('d')}} == this.event_day && (this.month+1) == {{slot.slotdate| date('m')}}){
