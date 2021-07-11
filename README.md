@@ -18,6 +18,14 @@ Seeding the Database with Admin Credentials
 ```
 php bin/console doctrine:fixtures:load
 ```
+Remove the user_id from slot table as unique
+```
+php bin/console doctrine:migrations:diff
+```
+Migrate again
+```
+symfony console doctrine:migrations:migrate
+```
 Now you are good to go
 ```
 symfony server:start
