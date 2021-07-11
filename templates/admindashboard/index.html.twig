@@ -45,7 +45,7 @@
     <a  data-entry-info="{{ entryInfo|json_encode }}"></a>
 {% endfor %}
 
-<div class="antialiased sans-serif bg-gray-100 h-screen">
+<div class="antialiased sans-serif bg-gray-100 h-screen ml-44 px-12 ">
 	<div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
 		<div class="container mx-auto px-4 py-2 md:py-24">
 			  
@@ -105,12 +105,9 @@
 						</template>	
 						<template x-for="(date, dateIndex) in no_of_days" :key="dateIndex">	
 						
-							<div style="width: 14.28%; height: 120px" class="px-4 pt-2 border-r border-b relative"
+							<div style="width: 14.28%; height: 120px" class="px-4 pt-2 border-r border-b relative transition ease-in-out duration-100 delay-100"
 																		:class="{'bg-red-200 border-gray-500' : date.unbooked === 0 && date.booked !== 0, 'bg-green-200 border-gray-500' : date.unbooked!== 0}">
 
-
-							
-								
 								<div
 									@click="showEventModal(date.day)"
 									x-text="date.day"
@@ -119,13 +116,23 @@
 									:class="{'bg-blue-500 text-white': isToday(date.day) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }"	
 								></div>
 
-								<div style="height: 80px;" class="overflow-y-auto mt-1" >
+								<div style="height: 80px;" class="overflow-y-auto mt-1 cursor-pointer" 
+								x-show="!(date.booked === 0 && date.unbooked === 0)"
+								 x-transition:enter="transition ease-in-out duration-300"
+									
+								x-transition:enter-start="opacity-0 transform scale-60"
+								x-transition:enter-end="opacity-100 transform scale-100"
+								x-transition:leave="transition ease-in duration-300"
+								x-transition:leave-start="opacity-100 transform scale-100"
+								x-transition:leave-end="opacity-0 transform scale-90"
+								>
 						
 									<div 
 										class="absolute top-0 right-10 mt-2 mr-2 inline-flex 
 										items-center justify-center rounded-full text-sm w-6 h-6  
 										 leading-none"
 										 x-text="date.booked"
+										 
 										style="border: 2px solid red;"
 										
 										></div>
@@ -133,17 +140,37 @@
 										<div 
 										style="border: 2px solid  #73AD21;"
 										x-text="date.unbooked"
+									
 										class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center 
 										justify-center rounded-full text-sm w-6 h-6  
 										 leading-none"
 										>
 										</div>
 
-</div>
+								</div>
 
+								<div style="height: 80px;" class="overflow-y-auto mt-1 cursor-pointer" 
+								x-show="(date.booked === 0 && date.unbooked === 0)"
+								 x-transition:enter="transition ease-in-out duration-300"
+									
+								x-transition:enter-start="opacity-0 transform scale-60"
+								x-transition:enter-end="opacity-100 transform scale-100"
+								x-transition:leave="transition ease-in duration-300"
+								x-transition:leave-start="opacity-100 transform scale-100"
+								x-transition:leave-end="opacity-0 transform scale-90"
+								>
+								<div 
+										style="border: 2px solid  lightsteelblue;"
+										
+										x-transition
+										class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center 
+										justify-center rounded-full text-sm w-6 h-6  
+										 leading-none"
+										>
+										E
+										</div>
 
-
-
+								</div>
 
 								<div style="height: 80px;" class="overflow-y-auto mt-1">
 									<div 
