@@ -104,8 +104,9 @@
 							></div>
 						</template>	
 						<template x-for="(date, dateIndex) in no_of_days" :key="dateIndex">	
+						
 							<div style="width: 14.28%; height: 120px" class="px-4 pt-2 border-r border-b relative"
-																		:class="{'bg-red-200 border-gray-500' : getSlotsUnBooked(date.day) === 0 && getSlotsBooked(date.day) !== 0, 'bg-green-200 border-gray-500' : getSlotsUnBooked(date.day) !== 0}">
+																		:class="{'bg-red-200 border-gray-500' : date.unbooked === 0 && date.booked !== 0, 'bg-green-200 border-gray-500' : date.unbooked!== 0}">
 
 
 							
@@ -124,14 +125,14 @@
 										class="absolute top-0 right-10 mt-2 mr-2 inline-flex 
 										items-center justify-center rounded-full text-sm w-6 h-6  
 										 leading-none"
-										 x-text="getSlotsBooked(date.day,this)"
+										 x-text="date.booked"
 										style="border: 2px solid red;"
 										
 										></div>
 						
 										<div 
 										style="border: 2px solid  #73AD21;"
-										x-text="getSlotsUnBooked(date.day)"
+										x-text="date.unbooked"
 										class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center 
 										justify-center rounded-full text-sm w-6 h-6  
 										 leading-none"
@@ -139,43 +140,6 @@
 										</div>
 
 </div>
-
-
-
-
-
-				   				{# <div x-on:mouseover="date.openEventPopup = true" 
-									x-on:mouseleave="date.openEventPopup = false" 
-									class=" ml-24 mt-0"
-									style="height: 25px;width: 25px; border: 2px solid #73AD21;border-radius: 50%;"></div> #}
-									
-								{# <div x-on:mouseover="date.openEventPopup = true" 
-									x-on:mouseleave="date.openEventPopup = false" 
-									class=" ml-14"
-									style="height: 25px;width: 25px; border: 2px solid #73AD21;border-radius: 50%;"></div> #}
-									
-								{# <div class="relative" x-cloak x-show.transition.origin.top="date.openEventPopup">
-									<div  style="background-color:#e2e8f0; z-index:1000;" class="absolute top-0 z-10 w-32 p-2 -mt-1 text-sm leading-tight text-white transform -translate-x-1/2 -translate-y-full  rounded-lg shadow-lg">
-									{% for slot in slots %}
-									
-									<template x-if="{{slot.booked}} ">
-											<div><span style="height: 25px;width: 25px; background-color: green;border-radius: 50%;display: inline-block;"></span></div>
-										</template>
-
-										<template x-if="{{slot.booked}} === 0">
-											<div><span style="height: 25px;width: 25px; background-color: red;border-radius: 50%;display: inline-block;"></span></div>
-										</template>
-									{% endfor %}
-										
-									</div>
-
-									<svg   class="absolute z-10 w-12 h-6 text-gray-300 transform -translate-x-12 -translate-y-3 fill-current stroke-current" width="8" height="8">
-										<rect x="12" y="-10" width="8" height="8" transform="rotate(45)" />
-									</svg>
-								</div> #}
-
-
-
 
 
 
@@ -327,6 +291,8 @@
 				slots: 0,
 				no_of_days: [],
 				blankdays: [],
+				no_of_booked_slots: 0,
+				no_of_unbooked_slots: 0,
 				event_day:0,
 				days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 
@@ -383,43 +349,24 @@
 					this.month = today.getMonth();
 					this.year = today.getFullYear();
 					this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString();
-						console.log(entryIds)
+					console.log(entryIds)
 					
 				},
-				changeColorOfDate(day){
-					let dates = document.getElementsByClassName('dates');
-					for (let date of dates) {
-						let firstElementChild = date.firstElementChild;
-						if(parseInt(firstElementChild.innerHTML) === day ){
-							date.style.backgroundColor = 'lightsteelblue';
-						}
-						
-						
-					}
-
-
-				},
-				getSlotsBooked(day){
+				
+				getSlots(day){
 				
 					var slotsBooked=0
+					var slotsUnBooked=0
 					entryIds.forEach((element) => { 
 						if(parseInt(element.dateDay) === day  && parseInt(element.dateMonth) === (this.month+1) && parseInt(element.booked))
 							slotsBooked+=1
-					 } )
-					
-					return slotsBooked
-				},
-					
-				getSlotsUnBooked(day){
-				
-					var slotsUnBooked=0
-					entryIds.forEach((element) => { 
-						
-						if(  parseInt(element.dateDay)===day && parseInt(element.dateMonth) === (this.month+1) && !parseInt(element.booked))
+						else if(parseInt(element.dateDay) === day  && parseInt(element.dateMonth) === (this.month+1) && !parseInt(element.booked))
 							slotsUnBooked+=1
-			  		 } )
-					 
-					return slotsUnBooked
+							
+					 } )
+					this.no_of_booked_slots=slotsBooked
+					this.no_of_unbooked_slots=slotsUnBooked 
+					return slotsBooked
 				},
 				
 
@@ -475,8 +422,11 @@
 					for ( var i=1; i <= daysInMonth; i++) {
 						daysArray = {};
 						daysArray['day']=i;
-						daysArray['openEventPopup']=false;
+						
 						this.no_of_days.push(daysArray);
+						this.getSlots(i)
+						daysArray['booked']=this.no_of_booked_slots
+						daysArray['unbooked']=this.no_of_unbooked_slots
 					}
 					console.log(JSON.stringify(this.no_of_days))
 					this.blankdays = blankdaysArray;
