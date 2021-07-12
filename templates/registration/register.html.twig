@@ -54,14 +54,8 @@
                 </h2>
    <div class="flex justidy-center mt-8 ml-8">
     {{ form_start(registrationForm) }}
-    <div class="mt-4 mb-4">
-    {{form_label(registrationForm.email, 'Email')}}
-    <br>  
-        {# {{ form_row(registrationForm.email,{'attr': {'class': 'mr-8'}}) }} #}
-        {{ form_widget(registrationForm.email, {'attr': {'class': 'pl-8 border-b-2 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg'}}) }}
-        <br>
-           </div>
-               <div class="mt-4 mb-4">
+
+ <div class="mt-4 mb-4">
             {{form_label(registrationForm.name, 'Name')}}
             <br>
             {{ form_widget(registrationForm.name, {'attr': {'class': 'pl-8 border-b-2 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg'}}) }}
@@ -72,6 +66,15 @@
                         <br>
             {{ form_widget(registrationForm.phone, {'attr': {'class': 'pl-8 border-b-2 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg'}}) }}
       </div>
+
+    <div class="mt-4 mb-4">
+    {{form_label(registrationForm.email, 'Email')}}
+    <br>  
+        {# {{ form_row(registrationForm.email,{'attr': {'class': 'mr-8'}}) }} #}
+        {{ form_widget(registrationForm.email, {'attr': {'class': 'pl-8 border-b-2 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg'}}) }}
+        <br>
+           </div>
+              
         <div class="mt-4 mb-4">
         {# {{ form_row(registrationForm.plainPassword, {
             label: 'Password'
