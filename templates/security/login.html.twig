@@ -3,6 +3,16 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+<div>
+
+
+<div class="min-h-screen bg-green-100 py-6 flex flex-col justify-center sm:py-12">
+
+  <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+    <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-sky-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+    <div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+    <div class= "relative py-3 sm:max-w-xl sm:mx-auto">
+    <div class= "h-2 bg-green-400 rounded-t-md"></div>
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -14,11 +24,13 @@
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <h1 class="text-2xl font-bold" "h2 mb-3 font-weight-normal">Please sign in</h1>
     <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    </Br>
+    <input type="email" value="{{ last_username }}" name="email"placeholder= "Enter Your email" id="inputEmail" class="form-control border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-500 rounded -md" autocomplete="email" required autofocus>
+    </Br>
+     <label classs = "block mt-3 font - semibold"> Password </label>
+            <input type = "password" name="password" placeholder= "Enter Your Password" class = "border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-500 rounded -md">
 
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
@@ -35,8 +47,15 @@
         </div>
     #}
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
+  
+     <button type="submit" class = "mt-4 bg-indig-500 text-black py-2 px-6 rounded-md hover:bg-indigo-600">Sign in </button>
+        
     </button>
 </form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 {% endblock %}

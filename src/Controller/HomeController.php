@@ -19,6 +19,7 @@ class HomeController extends AbstractController
     #[Route('/home', name: 'home')]
     public function calender(Request $request): Response
     {
+    
         $form = $this->createFormBuilder()
             ->add('slotDate', DateType::class)
             ->add('save', SubmitType::class, ['label' => 'View Slots'])
@@ -31,10 +32,15 @@ class HomeController extends AbstractController
             return $this->redirectToRoute('slotlist',array('date'=>$date ));
         }
 
+        $slots=$this->getDoctrine()->getRepository(Slot::class)->findAll();
         return $this->render('home/calendar.html.twig', [
-            'form' => $form->createView()
-        ]);
+            'form' => $form->createView(),
+            'slots' => $slots
+    ]);
     }
+
+ 
+
 
     #[Route('/home/{date}', name: 'slotlist')]
     public function index(Request $request, $date = 'date'): Response
@@ -51,7 +57,7 @@ class HomeController extends AbstractController
             array_push($slotArray, [$slot->getId(),$slot->getSlotDate()->format('Y-m-d'), $slot->getSlotTime()->format('H:i'), $slot->getBooked()]);
         }
 
-        return $this->render('home/index.html.twig', ['slots' => $slotArray]);
+        return $this->render('home/index.html.twig', ['slots' => $slotArray,]);
     }
     
 
@@ -82,3 +88,4 @@ class HomeController extends AbstractController
         return $this->render('book/book.html.twig', ['booking_form' => $form->createView()]);
     }
 }
+
