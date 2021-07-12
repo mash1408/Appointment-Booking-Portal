@@ -28,6 +28,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $email;
 
+ 
+    /**
+     * @ORM\Column(type="string", length=500, unique=false)
+     */
+    private $name;
+    /**
+     * @ORM\Column(type="string", length=20, unique=false)
+     */
+
+    private $phone;
     /**
      * @ORM\Column(type="json")
      */
@@ -48,6 +58,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->email;
     }
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
 
     public function setEmail(string $email): self
     {
@@ -55,7 +73,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
+        return $this;
+    }
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
     /**
      * A visual identifier that represents this user.
      *
@@ -65,6 +94,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string) $this->email;
     }
+
 
     /**
      * @deprecated since Symfony 5.3, use getUserIdentifier instead
