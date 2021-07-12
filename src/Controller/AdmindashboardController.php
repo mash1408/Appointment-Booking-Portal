@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[IsGranted('ROLE_ADMIN')]
 class AdmindashboardController extends AbstractController
@@ -232,5 +233,51 @@ class AdmindashboardController extends AbstractController
             'adminslot' => $form->createView(),
             'slots' => $slots
     ]);
+}
+#[Route('/delete/{id}', name: 'deleteSlot')]
+
+public function delete(Request $request,$id){
+    $slot = new Slot();
+    $slot= $this->getDoctrine()->getRepository(Slot::class) ->find($id);
+    // get current date and time
+    $dateNow= date('Y-m-d');
+    $timeNow= date('H:i:s',strtotime("+30 minutes"));
+    if($dateNow < $slot->getSlotDate() && $timeNow < $slot->getSlotTime()->format('H:i:s')){
+        if(!$slot->getBooked()){
+        $entityManager= $this->getDoctrine()->getManager();
+        $entityManager->remove($slot);
+        $entityManager->flush();
+        $response=new Response();
+        $response->setContent(json_encode([
+            'status' => 200,
+            'message' => 'delete successful of slot with id '.$id
+        ]));
+        return $response;
+    }
+    else{
+        $response=new Response();
+        $response->setContent(json_encode([
+            'status' => 300,
+            'message' => 'booked slot'
+        ]));
+        return $response;
+
+    }
+     }
+     else{
+        $response=new Response();
+        $response->setContent(json_encode([
+            'status' => 400,
+            'message' => 'Unable to delete after the 30 minutes gap'
+        ]));
+        return $response;
+
+     }
+     
+    
+    
+    
+   
+
 }
 }
