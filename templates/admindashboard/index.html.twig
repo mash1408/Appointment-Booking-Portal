@@ -116,7 +116,7 @@
 									:class="{'bg-blue-400 text-white': isToday(date.day) == true, 'hover:bg-blue-200': isToday(date) == false }"	
 								></div>
 
-								<div style="height: 80px;" class="overflow-y-auto mt-1 cursor-pointer" 
+								<div style="height: 80px;" class="overflow-y-auto mt-1 " 
 								x-show="!(date.booked === 0 && date.unbooked === 0)"
 								 x-transition:enter="transition ease-in-out duration-300"
 									
@@ -128,7 +128,7 @@
 								>
 						
 									<div 
-										class="absolute top-0 right-10 mt-2 mr-2 inline-flex 
+										class="cursor-pointer absolute top-0 right-10 mt-2 mr-2 inline-flex 
 										items-center justify-center rounded-full text-sm w-6 h-6  
 										 leading-none"
 										 x-text="date.booked"
@@ -141,7 +141,7 @@
 										style="border: 2px solid  #73AD21;"
 										x-text="date.unbooked"
 									
-										class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center 
+										class=" cursor-pointer absolute top-0 right-0 mt-2 mr-2 inline-flex items-center 
 										justify-center rounded-full text-sm w-6 h-6  
 										 leading-none"
 										>
@@ -172,13 +172,14 @@
 
 								</div>
 
-								<div style="height: 80px;" class="overflow-y-auto mt-1">
+								<div style="height: 80px;" class="overflow-y-auto mt-1 " id="test1">
 									<div 
 										class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center justify-center rounded-full text-sm w-6 h-6 bg-gray-700 text-white leading-none"
 										x-show="events.filter(e => e.event_date === new Date(year, month, date).toDateString()).length"
-										x-text="events.filter(e => e.event_date === new Date(year, month, date).toDateString()).length"></div>
+										x-text="events.filter(e => e.event_date === new Date(year, month, date).toDateString()).length">
+									</div>
 
-									<template x-for="event in events.filter(e => new Date(e.event_date).toDateString() ===  new Date(year, month, date).toDateString() )">	
+									{# <template x-for="event in events.filter(e => new Date(e.event_date).toDateString() ===  new Date(year, month, date).toDateString() )">	
 										<div
 											class="px-2 py-1 rounded-lg mt-1 overflow-hidden border"
 											:class="{
@@ -191,7 +192,7 @@
 										>
 											<p x-text="event.event_title" class="text-sm truncate leading-tight"></p>
 										</div>
-									</template>
+									</template> #}
 								</div>
 
 							</div>
@@ -280,9 +281,35 @@
 			);
 		
 
-				function deleteSlot(id){
-					 
-					return slotsUnBooked
+				async function deleteSlot(id){
+					let response
+					try{
+					response=await fetch('/delete/'+ id,{
+						method: 'DELETE'
+
+					 })
+					  var server=await response.json()
+						if(server.status === 200){
+					 		console.log(server.message)	
+						
+						}
+						if(server.status === 400){
+							alert(server.message)
+							return
+
+						}
+						if(server.status === 300){
+							alert(server.message)
+							return
+
+						}
+					
+					}	catch(error){
+						alert('something went wrong')
+						console.log(error)
+					}
+					
+									 
 				}
 
 
@@ -459,15 +486,23 @@
 					this.blankdays = blankdaysArray;
 					
 				},
+				 removeAllChildNodes(parent) {
+					 console.log('del')
+					while (parent.firstChild) {
+						parent.removeChild(parent.firstChild);
+					}
+				},
 				//async method to display slots without requiring page refresh
 				showSlots(){
 					
 						const element = document.getElementById("test");
+						
 						{% for slot in slots %}
+						
 							if({{slot.slotdate| date('d')}} == this.event_day && (this.month+1) == {{slot.slotdate| date('m')}}){
-
+									
 							var newDiv = document.createElement("div");
-								//element.appendChild(newDiv)
+								element.appendChild(newDiv)
 								var innerDiv = document.createElement("div");
 									newDiv.appendChild(innerDiv)
 										innerDiv.className="mt-4 justify-around border-2 border-gray-200 rounded-lg  text-gray-700 bg-gray-200"
