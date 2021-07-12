@@ -14,6 +14,14 @@
 			display: none;
 		}
 	</style>
+    {% for slot in slots %}
+    {% set entryInfo={
+        id: slot.id,
+        booked: slot.booked,
+        dateDay: slot.slotdate|date('d')
+    }%}
+        <a  data-entry-info="{{ entryInfo|json_encode }}"></a>
+    {% endfor %}
 
 <div class="antialiased sans-serif w-screen h-screen">
 
@@ -106,11 +114,41 @@
 						<template x-for="(date, dateIndex) in no_of_days" :key="dateIndex">	
 							<div style="width: 14.28%; height: 120px" class="px-4 pt-2 border-r border-b relative">
 								<div
-									@click="showEventModal(date)"
-									x-text="date"
+									@click="showEventModal(date.day)"
+									x-text="date.day"
 									class="inline-flex w-6 h-6 items-center justify-center cursor-pointer text-center leading-none rounded-full transition ease-in-out duration-100"
 									:class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }"	
 								></div>
+
+
+
+				<div style="height: 80px;" class="overflow-y-auto mt-1" >
+						
+									<div 
+										class="absolute top-0 right-10 mt-2 mr-2 inline-flex 
+										items-center justify-center rounded-full text-sm w-6 h-6  
+										 leading-none"
+										 x-text="getSlotsBooked(date.day)"
+										style="border: 2px solid #73AD21;"
+										
+										></div>
+						
+										<div 
+										style="border: 2px solid red;"
+										x-text="getSlotsUnBooked(date.day)"
+										class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center 
+										justify-center rounded-full text-sm w-6 h-6  
+										 leading-none"
+										>
+						</div>
+
+</div>
+
+
+
+
+
+
 								<div style="height: 80px;" class="overflow-y-auto mt-1">
 									<div 
 										class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center justify-center rounded-full text-sm w-6 h-6 bg-gray-700 text-white leading-none"
@@ -192,9 +230,55 @@
 			</div>
 		</div> #}
 		<!-- /Modal -->
+
+		{# {{ form_start(form) }} #}
+        {# {{ form_widget(form) }}
+        {{ form_end(form) }} #}
 	</div>
 
 	<script>
+
+
+
+
+
+    
+        var entryIds=[]
+					 const entryElements =
+						document.querySelectorAll('[data-entry-info]');
+			
+					// Map over each element and extract the data value
+					entryIds =
+						Array.from(entryElements).map(
+							item => JSON.parse(item.dataset.entryInfo)
+						);
+
+                        
+
+function	getSlotsBooked(day){
+				
+					var slotsBooked=0
+					entryIds.forEach((element) => { 
+						if(parseInt(element.dateDay) === day && parseInt(element.booked))
+							slotsBooked+=1
+					 } )
+					return slotsBooked
+				}
+					
+			function	getSlotsUnBooked(day){
+				
+					var slotsUnBooked=0
+					entryIds.forEach((element) => { 
+						if(  parseInt(element.dateDay)===day && !parseInt(element.booked))
+							slotsUnBooked+=1
+					 } )
+                     return slotsUnBooked
+                    }
+
+
+
+
+
 		const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -306,7 +390,8 @@
 					this.openEventModal = false;
 				},
 
-				getNoOfDays() {
+				
+					getNoOfDays() {
 					let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
 
 					// find where to start calendar day of week
@@ -315,14 +400,17 @@
 					for ( var i=1; i <= dayOfWeek; i++) {
 						blankdaysArray.push(i);
 					}
-
-					let daysArray = [];
+					this.no_of_days=[]
+					let daysArray = {};
 					for ( var i=1; i <= daysInMonth; i++) {
-						daysArray.push(i);
+						daysArray = {};
+						daysArray['day']=i;
+						daysArray['openEventPopup']=false;
+						this.no_of_days.push(daysArray);
 					}
-					
+					console.log(JSON.stringify(this.no_of_days))
 					this.blankdays = blankdaysArray;
-					this.no_of_days = daysArray;
+					
 				}
 			}
 		}

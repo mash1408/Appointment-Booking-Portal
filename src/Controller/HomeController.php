@@ -34,7 +34,7 @@ class HomeController extends AbstractController
 
         $slots=$this->getDoctrine()->getRepository(Slot::class)->findAll();
         return $this->render('home/calendar.html.twig', [
-            // 'adminslot' => $form->createView(),
+            'form' => $form->createView(),
             'slots' => $slots
     ]);
     }
@@ -57,7 +57,7 @@ class HomeController extends AbstractController
             array_push($slotArray, [$slot->getId(),$slot->getSlotDate()->format('Y-m-d'), $slot->getSlotTime()->format('H:i'), $slot->getBooked()]);
         }
 
-        return $this->render('home/index.html.twig', ['slots' => $slotArray]);
+        return $this->render('home/index.html.twig', ['slots' => $slotArray,]);
     }
     
 
