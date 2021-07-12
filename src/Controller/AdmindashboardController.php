@@ -242,7 +242,7 @@ public function delete(Request $request,$id){
     // get current date and time
     $dateNow= date('Y-m-d');
     $timeNow= date('H:i:s',strtotime("+30 minutes"));
-    if($dateNow < $slot->getSlotDate() && $timeNow < $slot->getSlotTime()->format('H:i:s')){
+    if($dateNow < $slot->getSlotDate() || $dateNow == $slot->getSlotDate() && $timeNow < $slot->getSlotTime()->format('H:i:s')){
         if(!$slot->getBooked()){
         $entityManager= $this->getDoctrine()->getManager();
         $entityManager->remove($slot);
