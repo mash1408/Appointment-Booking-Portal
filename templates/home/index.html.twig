@@ -3,6 +3,7 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
+    {% if slots %}
     <div class="container">
         <div class="flex justify-center">
         {% set dateTime = date(slots[0][1]) %}
@@ -45,6 +46,12 @@
         </section>
 
     </div>
+    
+    {% else %}
+        <div class="mt-20 flex justify-center">
+            <h1 class="text-4xl">Sorry! No Slots Available for this Day =(</h1>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
