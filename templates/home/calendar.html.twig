@@ -4,7 +4,6 @@
 
 {% block body %}
 <div>
-
 	<link rel="dns-prefetch" href="//unpkg.com" />
 	<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
 	<link rel="stylesheet" href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css">
@@ -16,17 +15,40 @@
 		}
 	</style>
 
-<div class="antialiased sans-serif bg-gray-100 h-screen">
-	<div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
-		<div class="container mx-auto px-4 py-2 md:py-24">
-			  
-			<div class="font-bold text-gray-800 text-xl mb-4">
-                Slots
-			</div>
+<div class="antialiased sans-serif w-screen h-screen">
 
-			<div class="bg-white rounded-lg shadow overflow-hidden">
+ <nav class="bg-gray-800">
+  <div class="max-w-7xl mx-auto px-2">
+    <div class="relative flex items-center justify-between h-16">
+      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+        
+      </div>
+      <div class="flex-1 flex items-center justify-start">
+        <div class="sm:block sm:ml-6">
+          <div class="flex space-x-4">
+            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+            <a href="/home" class="text-white px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white " aria-current="page">Home</a>
+
+            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">My Appointments</a>
+          </div>
+        </div>
+      </div>
+      <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+        <a href="/logout" class="bg-gray-800 px-3 py-2 text-gray-400 hover:text-white focus:outline-none rounded-md hover:bg-gray-700 hover:text-white ">
+          Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+	<div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
+		<div class="container mx-auto px-4 py-2">
+			<div class="bg-white rounded-lg shadow overflow-hidden mt-5 border">
 
 				<div class="flex items-center justify-between py-2 px-6">
+				
 					<div>
 						<span x-text="MONTH_NAMES[month]" class="text-lg font-bold text-gray-800"></span>
 						<span x-text="year" class="ml-1 text-lg text-gray-600 font-normal"></span>
@@ -53,6 +75,13 @@
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
 							</svg>									  
 						</button>
+					</div>
+
+					<div class="p-1">
+					{{ form_start(form) }}
+					{{ form_widget(form.slotDate, { 'attr': {'hidden': 'true'} }) }}
+					{{ form_widget(form.save, {'attr': {'class': 'relative left-0 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'}}) }}
+					{{ form_end(form) }}
 					</div>
 				</div>	
 
@@ -163,10 +192,6 @@
 			</div>
 		</div> #}
 		<!-- /Modal -->
-
-		{{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
 	</div>
 
 	<script>
@@ -174,6 +199,11 @@
 		const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 		function app() {
+			let currentDate = new Date()
+            document.getElementById("form_slotDate_year").value = currentDate.getFullYear();
+            document.getElementById("form_slotDate_month").value = currentDate.getMonth()+1;
+            document.getElementById("form_slotDate_day").value = currentDate.getDate();
+			document.getElementById("form_save").innerHTML = "View slots for "+MONTH_NAMES[currentDate.getMonth()]+" "+currentDate.getDate()+" "+currentDate.getFullYear();
 			return {
 				month: '',
 				year: '',
@@ -250,6 +280,8 @@
                     document.getElementById("form_slotDate_year").value = this.event_date.getFullYear();
                     document.getElementById("form_slotDate_month").value = this.event_date.getMonth()+1;
                     document.getElementById("form_slotDate_day").value = this.event_date.getDate();
+
+					document.getElementById("form_save").innerHTML = "View slots for "+MONTH_NAMES[this.event_date.getMonth()]+" "+this.event_date.getDate()+" "+this.event_date.getFullYear();
 				},
 
 				addEvent() {
