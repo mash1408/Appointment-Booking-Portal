@@ -4,7 +4,6 @@
 
 {% block body %}
 <div>
-
 	<link rel="dns-prefetch" href="//unpkg.com" />
 	<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
 	<link rel="stylesheet" href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css">
@@ -15,18 +14,49 @@
 			display: none;
 		}
 	</style>
+    {% for slot in slots %}
+    {% set entryInfo={
+        id: slot.id,
+        booked: slot.booked,
+        dateDay: slot.slotdate|date('d')
+    }%}
+        <a  data-entry-info="{{ entryInfo|json_encode }}"></a>
+    {% endfor %}
 
-<div class="antialiased sans-serif bg-gray-100 h-screen">
+<div class="antialiased sans-serif w-screen h-screen">
+
+ <nav class="bg-gray-800">
+  <div class="max-w-7xl mx-auto px-2">
+    <div class="relative flex items-center justify-between h-16">
+      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+        
+      </div>
+      <div class="flex-1 flex items-center justify-start">
+        <div class="sm:block sm:ml-6">
+          <div class="flex space-x-4">
+            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+            <a href="/home" class="text-white px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white " aria-current="page">Home</a>
+
+            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">My Appointments</a>
+          </div>
+        </div>
+      </div>
+      <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+        <a href="/logout" class="bg-gray-800 px-3 py-2 text-gray-400 hover:text-white focus:outline-none rounded-md hover:bg-gray-700 hover:text-white ">
+          Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
 	<div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
-		<div class="container mx-auto px-4 py-2 md:py-24">
-			  
-			<div class="font-bold text-gray-800 text-xl mb-4">
-                Slots
-			</div>
-
-			<div class="bg-white rounded-lg shadow overflow-hidden">
+		<div class="container mx-auto px-4 py-2">
+			<div class="bg-white rounded-lg shadow overflow-hidden mt-5 border">
 
 				<div class="flex items-center justify-between py-2 px-6">
+				
 					<div>
 						<span x-text="MONTH_NAMES[month]" class="text-lg font-bold text-gray-800"></span>
 						<span x-text="year" class="ml-1 text-lg text-gray-600 font-normal"></span>
@@ -54,6 +84,13 @@
 							</svg>									  
 						</button>
 					</div>
+
+					<div class="p-1">
+					{{ form_start(form) }}
+					{{ form_widget(form.slotDate, { 'attr': {'hidden': 'true'} }) }}
+					{{ form_widget(form.save, {'attr': {'class': 'relative left-0 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'}}) }}
+					{{ form_end(form) }}
+					</div>
 				</div>	
 
 				<div class="-mx-1 -mb-1">
@@ -77,11 +114,41 @@
 						<template x-for="(date, dateIndex) in no_of_days" :key="dateIndex">	
 							<div style="width: 14.28%; height: 120px" class="px-4 pt-2 border-r border-b relative">
 								<div
-									@click="showEventModal(date)"
-									x-text="date"
+									@click="showEventModal(date.day)"
+									x-text="date.day"
 									class="inline-flex w-6 h-6 items-center justify-center cursor-pointer text-center leading-none rounded-full transition ease-in-out duration-100"
 									:class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }"	
 								></div>
+
+
+
+				<div style="height: 80px;" class="overflow-y-auto mt-1" >
+						
+									<div 
+										class="absolute top-0 right-10 mt-2 mr-2 inline-flex 
+										items-center justify-center rounded-full text-sm w-6 h-6  
+										 leading-none"
+										 x-text="getSlotsBooked(date.day)"
+										style="border: 2px solid #73AD21;"
+										
+										></div>
+						
+										<div 
+										style="border: 2px solid red;"
+										x-text="getSlotsUnBooked(date.day)"
+										class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center 
+										justify-center rounded-full text-sm w-6 h-6  
+										 leading-none"
+										>
+						</div>
+
+</div>
+
+
+
+
+
+
 								<div style="height: 80px;" class="overflow-y-auto mt-1">
 									<div 
 										class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center justify-center rounded-full text-sm w-6 h-6 bg-gray-700 text-white leading-none"
@@ -164,16 +231,63 @@
 		</div> #}
 		<!-- /Modal -->
 
-		{{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
+		{# {{ form_start(form) }} #}
+        {# {{ form_widget(form) }}
+        {{ form_end(form) }} #}
 	</div>
 
 	<script>
+
+
+
+
+
+    
+        var entryIds=[]
+					 const entryElements =
+						document.querySelectorAll('[data-entry-info]');
+			
+					// Map over each element and extract the data value
+					entryIds =
+						Array.from(entryElements).map(
+							item => JSON.parse(item.dataset.entryInfo)
+						);
+
+                        
+
+function	getSlotsBooked(day){
+				
+					var slotsBooked=0
+					entryIds.forEach((element) => { 
+						if(parseInt(element.dateDay) === day && parseInt(element.booked))
+							slotsBooked+=1
+					 } )
+					return slotsBooked
+				}
+					
+			function	getSlotsUnBooked(day){
+				
+					var slotsUnBooked=0
+					entryIds.forEach((element) => { 
+						if(  parseInt(element.dateDay)===day && !parseInt(element.booked))
+							slotsUnBooked+=1
+					 } )
+                     return slotsUnBooked
+                    }
+
+
+
+
+
 		const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 		function app() {
+			let currentDate = new Date()
+            document.getElementById("form_slotDate_year").value = currentDate.getFullYear();
+            document.getElementById("form_slotDate_month").value = currentDate.getMonth()+1;
+            document.getElementById("form_slotDate_day").value = currentDate.getDate();
+			document.getElementById("form_save").innerHTML = "View slots for "+MONTH_NAMES[currentDate.getMonth()]+" "+currentDate.getDate()+" "+currentDate.getFullYear();
 			return {
 				month: '',
 				year: '',
@@ -250,6 +364,8 @@
                     document.getElementById("form_slotDate_year").value = this.event_date.getFullYear();
                     document.getElementById("form_slotDate_month").value = this.event_date.getMonth()+1;
                     document.getElementById("form_slotDate_day").value = this.event_date.getDate();
+
+					document.getElementById("form_save").innerHTML = "View slots for "+MONTH_NAMES[this.event_date.getMonth()]+" "+this.event_date.getDate()+" "+this.event_date.getFullYear();
 				},
 
 				addEvent() {
@@ -274,7 +390,8 @@
 					this.openEventModal = false;
 				},
 
-				getNoOfDays() {
+				
+					getNoOfDays() {
 					let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
 
 					// find where to start calendar day of week
@@ -283,14 +400,17 @@
 					for ( var i=1; i <= dayOfWeek; i++) {
 						blankdaysArray.push(i);
 					}
-
-					let daysArray = [];
+					this.no_of_days=[]
+					let daysArray = {};
 					for ( var i=1; i <= daysInMonth; i++) {
-						daysArray.push(i);
+						daysArray = {};
+						daysArray['day']=i;
+						daysArray['openEventPopup']=false;
+						this.no_of_days.push(daysArray);
 					}
-					
+					console.log(JSON.stringify(this.no_of_days))
 					this.blankdays = blankdaysArray;
-					this.no_of_days = daysArray;
+					
 				}
 			}
 		}
