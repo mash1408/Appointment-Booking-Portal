@@ -121,7 +121,6 @@ class HomeController extends AbstractController
     #[Route('/reviews', name: 'reviews')]
     public function showReviews(Request $request): Response
     {   
-        $userReviewed = null;
         $form = $this->createFormBuilder()
             ->add('rating', IntegerType::class)
             ->add('comment', TextareaType::class)
@@ -140,9 +139,6 @@ class HomeController extends AbstractController
             $uid = $form["userid"]->getData();
             $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['id' => $uid]);
 
-            $userreview = $this->getDoctrine()->getRepository(Review::class)->findOneBy(['user' => $uid]);
-
-            if(!$userreview){
             date_default_timezone_set('Asia/Kolkata');
             $currentDate = date('m/d/Y h:i:s');
             $commented_at = \DateTime::createFromFormat('m/d/Y h:i:s', $currentDate);
@@ -157,10 +153,6 @@ class HomeController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($review);
             $entityManager->flush();
-            }
-            else{
-                $userReviewed = "You have already sent us your ratings";
-            }
         }
 
         $reviews = $this->getDoctrine()->getRepository(Review::class)->findAll();
@@ -169,9 +161,9 @@ class HomeController extends AbstractController
 
         foreach ($reviews as $review) {
             $user = $review->getUser()->getName();
-            array_push($reviewsArray, [ $review->getId(),$user, $review->getCommentedAt()->format('Y-m-d H:i:s'), $review->getRating(), $review->getCategory(), $review->getComment()]);
+            array_push($reviewsArray, [ $review->getId(),$user, $review->getCommentedAt()->format('Y-m-d H:i:s'), $review->getRating(), $review->getCategory(), $review->getComment(), $review->getReply()]);
         }
-        return $this->render('home/reviews.html.twig',['review_form'=> $form->createView(), 'ratings'=>$reviewsArray, 'hasReviewed'=>$userReviewed]);
+        return $this->render('home/reviews.html.twig',['review_form'=> $form->createView(), 'ratings'=>$reviewsArray]);
     }
 }
 
