@@ -146,15 +146,15 @@
 				<div class="-mx-1 -mb-1">
 					<div class="flex flex-wrap" style="margin-bottom: -40px;">
 						<template x-for="(day, index) in DAYS" :key="index">	
-							<div style="width: 14.26% " class="px-2 py-2 ">
+							<div style="width: 14.26% " class="px-2 py-2 flex justify-center">
 								<div 
 									x-text="day" 
-									class="relative z-10 text-gray-600 text-sm uppercase tracking-wide font-bold text-center "></div>
+									class="absolute mt-0 z-10 text-gray-600 text-sm uppercase tracking-wide font-bold text-center "></div>
 							</div>
 						</template>
 					</div>
 
-					<div class="flex flex-wrap border-t border-l">
+					<div class="flex flex-wrap border-t border-l mt-5">
 						<template x-for="blankday in blankdays">
 							<div 
 								style="width: 14.28%; height: 120px"
