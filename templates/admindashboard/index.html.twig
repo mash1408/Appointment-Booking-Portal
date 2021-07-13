@@ -299,7 +299,7 @@
 												<template x-if="{{slot.slotdate| date('d')}} == event_day && (month+1) == {{slot.slotdate| date('m')}}">
 													 #}
 														<tbody id ="slots" class="bg-white divide-y divide-gray-200">
-															{# <tr>
+															 {# <tr>
 																<td class="px-6 py-4">
 																	<div class="flex items-center">
 																		<div class="ml-4">
@@ -343,17 +343,8 @@
 																	<div class="flex items-center">
 																		<div class="ml-4">
 																			<div class=" font-xs text-gray-900">
-																			{{customer.phone}}
-																			</div>
-																		</div>
-																	</div>
-																</td>
-															</tr> #}
-														
-{# 													
-												</template>
-											{% endfor %} #}
-											</tbody>
+																			{{customer.phone}} #}
+ 					</tbody>
 											
 									</table>		
 								</div>
@@ -505,9 +496,6 @@
 							this.newSlotData()
 							setTimeout(() => { this.showSlots() }, 200);
 							
-							
-							
-						
 						}
 						if(server.status === 400){
 							alert(server.message)
@@ -672,6 +660,24 @@
 												cell3.appendChild(unbooked)
 
 											}
+										var cell4 = row.insertCell(3);
+											cell4.className="px-6 py-4"
+											var user = document.createElement("SPAN");
+												user.className="font-xs text-gray-900"
+												if(!slot.user )
+													user.innerHTML="--"
+												else
+													user.innerHTML=slot.user
+												cell4.appendChild(user)
+										var cell5 = row.insertCell(4);
+											cell5.className="px-6 py-4"
+											var category = document.createElement("SPAN");
+												category.className="font-xs text-gray-900"
+													if(!slot.category)
+														category.innerHTML="--"
+													else
+														user.innerHTML=slot.category
+												cell5.appendChild(category)
 
 														
 

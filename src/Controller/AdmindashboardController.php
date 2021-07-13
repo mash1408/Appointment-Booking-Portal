@@ -203,6 +203,7 @@ public function getSlots(Request $request){
             'slotdate' => $slot->getSlotDate()->format('Y-m-d'),
             'slottime' => $slot->getSlotTime()->format('h:i:s'),
             'category' => $slot->getCategory(),
+            'user' => $slot->getUser(),
     ];
         array_push($slotArray,$object);
     }
