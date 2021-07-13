@@ -89,8 +89,8 @@
     </div>
 	</div>
 	</nav>
-<div id="test" class="test">
-</div>
+{# <div id="test" class="test">
+</div> #}
 
 
 {# pass slot data to javascript inorder to be able to access them  #}
@@ -391,6 +391,7 @@
 		
 
 				async function deleteSlot(id){
+					console.log(id)
 					let response
 					try{
 					response=await fetch('/delete/'+ id,{
@@ -400,6 +401,7 @@
 					  var server=await response.json()
 						if(server.status === 200){
 					 		console.log(server.message)	
+							location.reload();
 						
 						}
 						if(server.status === 400){
@@ -545,7 +547,7 @@
 					this.openEventModal = true;
 					this.event_date = new Date(this.year, this.month, date).toDateString();
 					this.event_day=date;
-					this.showSlots()
+				
 				},
 
 				addEvent() {
@@ -591,7 +593,7 @@
 						daysArray['booked']=this.no_of_booked_slots
 						daysArray['unbooked']=this.no_of_unbooked_slots
 					}
-					console.log(JSON.stringify(this.no_of_days))
+					console.table(this.no_of_days)
 					this.blankdays = blankdaysArray;
 					
 				},
