@@ -26,6 +26,75 @@
       </div>
 
       <ul class="flex-1 flex justify-center md:justify-end list-reset z-50">
+      {% if app.user %}
+        {% if app.user.isAdmin() %}
+        <li class="ml-8 hidden md:inline">
+          <a
+            href="/admindashboard"
+            class=" z-50
+              text-sm
+              font-bold
+              px-4
+              py-3
+              no-underline
+              text-white
+              bg-black
+              hover:bg-gray-800
+            "
+            >Go to Dashboard</a
+          >
+        </li>
+        <li class="ml-8 hidden md:inline ">
+          <a
+            href="/logout"
+            class=" z-50
+              text-sm
+              font-bold
+              px-4
+              py-3
+              no-underline
+              text-white
+              bg-red-500
+              hover:bg-red-800
+            "
+            >Logout</a
+          >
+        </li>
+        {% else %}
+        <li class="ml-8 hidden md:inline">
+          <a
+            href="/home"
+            class=" z-50
+              text-sm
+              font-bold
+              px-4
+              py-3
+              no-underline
+              text-white
+              bg-black
+              hover:bg-gray-800
+            "
+            >Go to Dashboard</a
+          >
+        </li>
+        <li class="ml-8 hidden md:inline ">
+          <a
+            href="/logout"
+            class=" z-50
+              text-sm
+              font-bold
+              px-4
+              py-3
+              no-underline
+              text-white
+              bg-red-500
+              hover:bg-red-800
+            "
+            >Logout</a
+          >
+        </li>
+        {% endif %}
+      {% else %}
         <li class="ml-8 hidden md:inline">
           <a
             href="/login"
@@ -58,6 +127,7 @@
             >Register</a
           >
         </li>
+      {% endif %}
       </ul>
     </header>
 
@@ -138,7 +208,38 @@
             <p class="mb-10 text-gray-700">
               Get a whole range of relaxing treatments for your entire body, that is sure to take you to the moon and back for a few hours.
             </p>
-            <a
+            {% if app.user %}
+              {% if app.user.isAdmin() %}
+              <a
+                href="/admindashboard"
+                class="
+                  inline-block
+                  bg-black
+                  text-white
+                  px-6
+                  py-3
+                  text-sm
+                  hover:bg-gray-800
+                "
+                >Find out more</a
+              >
+              {% else %}
+              <a
+              href="/home"
+              class="
+                inline-block
+                bg-black
+                text-white
+                px-6
+                py-3
+                text-sm
+                hover:bg-gray-800
+              "
+              >Find out more</a
+            >
+            {% endif %}
+          {% else %}
+          <a
               href="/login"
               class="
                 inline-block
@@ -151,6 +252,7 @@
               "
               >Find out more</a
             >
+            {% endif %}
           </div>
         </div>
       </div>
