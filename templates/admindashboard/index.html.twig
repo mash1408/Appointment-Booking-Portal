@@ -401,15 +401,28 @@
 		mr.value=(today.getMonth()+1).toString()
 		me.value=(today.getMonth()+1).toString()
 
+		 var op = document.getElementById("form_start_date_day").getElementsByTagName("option");
+		 var oe = document.getElementById("form_end_date_day").getElementsByTagName("option");
+		for (var i = 0; i < op.length && i < today.getDate()-1; i++) {
+				 op[i].disabled = true 
+				 oe[i].disabled = true 
+		}
+		var om = document.getElementById("form_start_date_month").getElementsByTagName("option");
+		 var ome = document.getElementById("form_end_date_month").getElementsByTagName("option");
+		for (var i = 0; i < op.length && i < today.getMonth(); i++) {
+				 om[i].disabled = true 
+				 ome[i].disabled = true 
+		}
+		var oy = document.getElementById("form_start_date_year").getElementsByTagName("option");
+		 var oye = document.getElementById("form_end_date_year").getElementsByTagName("option");
+		let inc=0
+		for (var i = oy[0].value; i <  today.getFullYear(); i++) {
+				 	
+				 oy[inc].disabled = true 
 
-		
-		
-		 //var op = document.getElementById("form_start_date_day").getElementsByTagName("option");
-		 //var oe = document.getElementById("form_end_date_day").getElementsByTagName("option");
-		//for (var i = 0; i < op.length && i < today.getMonth()+1; i++) {
-		//		 opm[i].disabled = true 
-		//	oem[i].disabled =true
-		//	}
+				 oye[inc].disabled = true 
+				 inc+=1
+		}
 		var yr = document.getElementById("form_start_date_year");
 		yr.value='2021';
 		//yr.setAttribute("read-only", "true");
