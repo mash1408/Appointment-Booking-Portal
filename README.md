@@ -5,7 +5,7 @@
 Download Symfony form <a href="https://symfony.com/download">Here</a>
 
 ```
-Delete all files in the migrations folder EXCEPT for "Version20210712171423.php"
+Delete all files in the migrations folder EXCEPT for "Version20210713175426.php"
 ```
 
 ```
