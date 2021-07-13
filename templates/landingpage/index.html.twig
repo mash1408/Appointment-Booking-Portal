@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sim's Spa{% endblock %}
+
+{% block body %}
+
+    <header
+      class="
+        flex flex-wrap
+        items-center
+        justify-between
+        px-12
+        h-32
+        -mb-32
+        relative
+      "
+    >
+      <div class="w-full md:w-auto flex justify-center">
+        <a href="#" class="block text-center text-black text-lg no-underline">
+          <img
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0xMyA5aDlsLTE0IDE1IDMtOWgtOWwxNC0xNS0zIDl6bS04LjY5OSA1aDguMDg2bC0xLjk4NyA1Ljk2MyA5LjI5OS05Ljk2M2gtOC4wODZsMS45ODctNS45NjMtOS4yOTkgOS45NjN6Ii8+PC9zdmc+"
+            alt="Main"
+            class="w-10 h-auto"
+          />
+        </a>
+      </div>
+
+      <ul class="flex-1 flex justify-center md:justify-end list-reset z-50">
+        <li class="ml-8 hidden md:inline">
+          <a
+            href="/login"
+            class=" z-50
+              text-sm
+              font-bold
+              px-4
+              py-3
+              no-underline
+              text-white
+              bg-black
+              hover:bg-gray-800
+            "
+            >Login</a
+          >
+        </li>
+        <li class="ml-8 hidden md:inline ">
+          <a
+            href="/register"
+            class=" z-50
+              text-sm
+              font-bold
+              px-4
+              py-3
+              no-underline
+              text-white
+              bg-black
+              hover:bg-gray-800
+            "
+            >Register</a
+          >
+        </li>
+      </ul>
+    </header>
+
+    <div class="w-full flex flex-wrap md:h-screen pt-30">
+      <div class="pt-6 md:pt-0 w-full md:flex-1 md:order-last opacity-75">
+        <img
+          class="w-full h-64 md:h-full object-top"
+          src="https://i.ibb.co/YpKpcy2/32-2.jpg"
+        />
+      </div>
+      <div
+        class="
+          w-full
+          p-6
+          pb-12
+          md:p-12 md:w-5/12
+          flex
+          justify-center
+          items-center
+          relative
+        "
+      >
+        <div
+          class="w-full relative text-center py-12 px-12 md:p-0 md:text-right"
+        >
+          <h1 class="text-5xl mb-4">Sim's Spa</h1>
+          <h2 class="text-2xl mb-4">
+            Great hair doesn't happen by chance, it happens by appointments.
+          </h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full -mt-6 pt-32 pb-24 px-12 text-center bg-black text-white">
+      <h2 class="text-4xl mb-6">Book an appointment online</h2>
+      <p class="font-sans text-sm mx-auto max-w-xl leading-loose mb-4">
+        Clients can book appointments online quickly and easily! With just a few
+        steps, clients can pick the date and time they'd like to come in, and
+        multiple services with the first available employee or a selected
+        employee or a selected employee of their choice.
+      </p>
+    </div>
+
+    <div class="py-24 px-12">
+      <div class="container mx-auto flex flex-wrap">
+        <div class="w-full md:w-1/2 md:pr-4 flex flex-wrap mb-12 md:mb-0">
+          <div class="p-2 w-1/2">
+            <img
+              src="https://i.ibb.co/Kyph9NP/d01cb7f6f2575ea92c34da9bb0141373.jpg"
+              class="w-full h-64 object-cover"
+            />
+          </div>
+          <div class="p-2 w-1/2">
+            <img
+              src="https://i.ibb.co/4KmSmNX/ranveer-singh-19858-26-07-2016-04-59-37.jpg"
+              class="w-full h-64 object-cover"
+            />
+          </div>
+          <div class="p-2 w-full">
+            <img
+              src="https://i.ibb.co/ZdgkJqg/category-ce6d9e00.png"
+              class="w-full h-64 object-cover"
+            />
+          </div>
+        </div>
+        <div class="w-full md:w-1/2 md:pl-4">
+          <h2 class="text-4xl mb-10">
+            Sim's Spa Services.
+          </h2>
+          <div class="max-w-lg">
+            <p class="mb-6 text-gray-700">
+              Our hair stylists have a wealth of experience to cut and style your hair.
+              We offer a variety of different modern hairstyles. From cut and colour to styling, we can create a unique look for all occasions.All our hair styling services include the use of the highest quality styling and care products. 
+            </p>
+            <p class="mb-6 text-gray-700">
+              There are a few different ways to get your beard trimmed at Sim's Spa, depending on which type of beard you have. We see all of these different types of beards come through our local men’s hair salons. So if you don’t want to trim it yourself, let us do the beard trimming for you!
+            </p>
+            <p class="mb-10 text-gray-700">
+              Get a whole range of relaxing treatments for your entire body, that is sure to take you to the moon and back for a few hours.
+            </p>
+            <a
+              href="/login"
+              class="
+                inline-block
+                bg-black
+                text-white
+                px-6
+                py-3
+                text-sm
+                hover:bg-gray-800
+              "
+              >Find out more</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-black text-white text-center text-sm py-12">
+      <p>Made with ❤️ by SimCity</p>
+    </div>
+
+{% endblock %}
