@@ -30,7 +30,8 @@
          {% if slot[3] == 0 %}
         <div class="all h-full bg-green-400 text-white bg-white border-gray-200 border p-4 rounded-lg shadow-2xl">
                 <p class="text-2xl font-semibold m-1 mb-5">Time: {{ slot[2] }}</p>
-                <a href="/book/{{slot[0]}}/{{app.user.id}}" class="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Book slot</a>
+                {# <a href="/book/{{slot[0]}}/{{app.user.id}}" class="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Book slot</a> #}
+                <button value={{ slot[0] }} class="modal-open book-slot mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Book slot</button>
                 {# <button data-id="{{ slot[0] }}" class="book-slot" value={{ slot[0] }}>Book Slot</button> #}
         </div>
         {% endif %}
@@ -55,12 +56,91 @@
             <h1 class="text-4xl">Sorry! No Slots Available for this Day =(</h1>
         </div>
     {% endif %}
+
+
+<div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+    <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+    
+    <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+      
+      <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
+        <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+          <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+        </svg>
+        <span class="text-sm">(Esc)</span>
+      </div>
+
+      <!-- Add margin if you want to see some of the overlay behind the modal-->
+      <div class="modal-content py-4 text-left px-6">
+        <!--Title-->
+        <div class="flex justify-between items-center pb-3">
+          <p class="text-2xl font-bold">Book your slot</p>
+          <div class="modal-close cursor-pointer z-50">
+            <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+              <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!--Body-->
+        <div class="flex flex-col">
+            {{ form_start(booking_form) }}
+            {{ form_label(booking_form.category) }}
+            {{ form_widget(booking_form.category) }}
+            {{ form_label(booking_form.id) }}
+            {{ form_widget(booking_form.save) }}
+            {{ form_end(booking_form) }}
+        </div>
+        
+      </div>
+    </div>
+  </div>
 {% endblock %}
 
 {% block javascripts %}
 <script>
     window.onload = function() {
         //console.log(document.getElementById("show-available"));
+
+
+
+        var openmodal = document.querySelectorAll('.modal-open')
+    for (var i = 0; i < openmodal.length; i++) {
+      openmodal[i].addEventListener('click', function(event){
+    	event.preventDefault()
+    	toggleModal()
+      })
+    }
+    
+    const overlay = document.querySelector('.modal-overlay')
+    overlay.addEventListener('click', toggleModal)
+    
+    var closemodal = document.querySelectorAll('.modal-close')
+    for (var i = 0; i < closemodal.length; i++) {
+      closemodal[i].addEventListener('click', toggleModal)
+    }
+    
+    document.onkeydown = function(evt) {
+      evt = evt || window.event
+      var isEscape = false
+      if ("key" in evt) {
+    	isEscape = (evt.key === "Escape" || evt.key === "Esc")
+      } else {
+    	isEscape = (evt.keyCode === 27)
+      }
+      if (isEscape && document.body.classList.contains('modal-active')) {
+    	toggleModal()
+      }
+    };
+    
+    
+    function toggleModal () {
+      const body = document.querySelector('body')
+      const modal = document.querySelector('.modal')
+      modal.classList.toggle('opacity-0')
+      modal.classList.toggle('pointer-events-none')
+      body.classList.toggle('modal-active')
+    }
 
     document.getElementById("filter").addEventListener("change",function(event) {
         if(event.target.value == "Show all"){
@@ -90,22 +170,19 @@
           }
         });
     }*/
-    var buttons = document.getElementsByClassName("book-slot");
-
-    for(let i=0; i<buttons.length; i++){
-        buttons[i].addEventListener('click', (e)=>{
-           console.log(e.target.getAttribute('data-id'))
-           const id = e.target.getAttribute('data-id');
-           fetch(`/book/${id}`,{
-               method: 'GET'
-           }).then(res => window.location.reload(`/book/${id}`))
-        });
-    }
+    
     /*buttons.forEach(element => {
         element.addEventListner('click', (e)=>{
             console.log('someone hit me');
         });
     });*/
+    
+
+    for(let i=0; i<document.getElementsByClassName("book-slot").length; i++){
+        document.getElementsByClassName("book-slot")[i].addEventListener("click", function(e){
+            document.getElementById("form_id").value = e.target.value;
+        })
     }
+}
 </script>
 {% endblock %}
