@@ -25,38 +25,16 @@
 
 <div class="antialiased sans-serif w-screen h-screen">
 
- <nav class="bg-green-600">
-  <div class="max-w-7xl mx-auto px-2">
-    <div class="relative flex items-center justify-between h-16">
-      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-        
-      </div>
-      <div class="flex-1 flex items-center justify-start">
-        <div class="sm:block sm:ml-6">
-          <div class="flex space-x-4">
-            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-            <a href="/home" class="text-white px-3 py-2 text-sm font-medium rounded-md hover:bg-green-700 hover:text-white " aria-current="page">Home</a>
-
-            <a href="#" class="text-white hover:bg-green-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">My Appointments</a>
-          </div>
-        </div>
-      </div>
-      <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-        <a href="/logout" class="px-3 py-2 text-white hover:text-white focus:outline-none rounded-md hover:bg-green-700 hover:text-white text-sm">
-          Logout
-        </a>
-      </div>
-    </div>
-  </div>
-</nav>
-
+ {% include 'navbar.html.twig' %}
 
 	<div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
 		<div class="container mx-auto px-4 py-2">
 			<div class="bg-white rounded-lg shadow overflow-hidden mt-5 border">
 
 				<div class="flex items-center justify-between py-2 px-6">
-				
+				<div>
+					<p class="text-lg text-gray-600">Select a date to view slots for that day</p>
+				</div>
 					<div>
 						<span x-text="MONTH_NAMES[month]" class="text-lg font-bold text-gray-800"></span>
 						<span x-text="year" class="ml-1 text-lg text-gray-600 font-normal"></span>
