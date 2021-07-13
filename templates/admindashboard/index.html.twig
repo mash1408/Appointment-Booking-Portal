@@ -15,12 +15,13 @@
 		}
 	</style>
 	<nav class="flex items-center justify-between flex-wrap bg-gray-900 p-6">
-<p class="text-green-600  font-medium rounded-md text-2xl  font-semibold font family:allura ">Sim's Spa</p>
+<p class="font-semibold rounded-md md:text-2xl md:font-serif text-transparent bg-clip-text bg-gradient-to-br from-orange-500 to-white">Sim's Spa</p>
 	<div x-data="{ showModal1: false}" :class="{'overflow-y-hidden': showModal1}">
     	<main class="flex flex-col sm:flex-row justify-end items-end">
 		<button class="justify-items-end bg-transparent  text-gray-500 font-semibold hover:text-white " @click="showModal1 = true">
 			Generate Slots
       </button>
+	  <a href="/home" class="justify-items-center ml-8 bg-transparent text-gray-500 font-semibold hover:text-white">Reserve a Slot</a>
 	  <a href="#" class="justify-items-center ml-8 bg-transparent text-gray-500 font-semibold hover:text-white">Ratings</a>
 	  <a href="/logout" class="justify-items-center ml-8 bg-transparent text-red-500 font-semibold hover:text-red-800">Logout</a>
 	  </main>
@@ -253,7 +254,7 @@
 
 		<!-- Modal -->
 		<div style=" background-color: rgba(0, 0, 0, 0.8)" class="fixed z-40  top-0 right-0 left-0 bottom-0 h-full w-full " x-transition:enter="transition duration-300" x-show.transition.opacity="openEventModal">
-			<div class="p-4 max-w-screen-md mx-auto relative absolute left-0 right-0 mt-24">
+			<div class="p-4 max-w-screen-xl mx-auto relative absolute left-0 right-0 mt-24">
 				<div class="shadow absolute right-0 top-0 w-10 h-10 rounded-full bg-white text-gray-500 hover:text-gray-800 inline-flex items-center justify-center cursor-pointer"
 					x-on:click="openEventModal = !openEventModal">
 					<svg class="fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -269,7 +270,7 @@
 						<div class="mb-4">
 
 					{# Delete Slot Function #}
-					<div class="overflow-y-auto h-80 ...">
+					<div class="overflow-y-auto overflow-x-hidden h-80 ...">
 					<div class="flex flex-col">
 						<div class=" sm:-mx-6 lg:-mx-8">
 							<div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -294,11 +295,12 @@
 											</th>
 											</tr>
 										</thead>
-											{% for slot in slots %}
+										
+											{# {% for slot in slots %}
 												<template x-if="{{slot.slotdate| date('d')}} == event_day && (month+1) == {{slot.slotdate| date('m')}}">
-													
-														<tbody class="bg-white divide-y divide-gray-200">
-															<tr>
+													 #}
+														<tbody id ="slots" class="bg-white divide-y divide-gray-200">
+															 {# <tr>
 																<td class="px-6 py-4">
 																	<div class="flex items-center">
 																		<div class="ml-4">
@@ -329,7 +331,7 @@
 																		</span>
 																	</td>
 																{% endif %}
-																{# <td class="px-6 py-4">
+																<td class="px-6 py-4">
 																	<div class="flex items-center">
 																		<div class="ml-4">
 																			<div class=" font-xs text-gray-900">
@@ -342,16 +344,9 @@
 																	<div class="flex items-center">
 																		<div class="ml-4">
 																			<div class=" font-xs text-gray-900">
-																			{{customer.phone}}
-																			</div>
-																		</div>
-																	</div>
-																</td> #}
-															</tr>
-														</tbody>
-													
-												</template>
-											{% endfor %}
+																			{{customer.phone}} #}
+ 					</tbody>
+											
 									</table>		
 								</div>
 							</div>
@@ -359,11 +354,10 @@
 					</div>
 					</div>
 					
-					<div class="mb-4">
-						<label class="text-gray-800  font-bold text-sm tracking-wide">Date</label>
-						<input class="mb-3 border-b-2 rounded-lg border-purple-500 font-display
+					<div class="mb-4 py-1">
+						<input class="mb-3 border-b-2 text-center rounded-lg border-purple-500 font-display
 						focus:border-primarycolor transition-all duration-500 text-lg appearance-none  
-						w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white 
+						w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white 
 						" type="text" x-model="event_date" readonly>
 					</div>
 					
@@ -380,8 +374,9 @@
 	console.log(elements)
 	
 });
-		
 
+		
+	var slotsData=[]
 	var entryIds=[]
 	const entryElements =document.querySelectorAll('[data-entry-info]');
 	// Map over each element and extract the data value
@@ -390,38 +385,7 @@
 			);
 		
 
-				async function deleteSlot(id){
-					console.log(id)
-					let response
-					try{
-					response=await fetch('/delete/'+ id,{
-						method: 'DELETE'
-
-					 })
-					  var server=await response.json()
-						if(server.status === 200){
-					 		console.log(server.message)	
-							location.reload();
-						
-						}
-						if(server.status === 400){
-							alert(server.message)
-							return
-
-						}
-						if(server.status === 300){
-							alert(server.message)
-							return
-
-						}
-					
-					}	catch(error){
-						alert('something went wrong')
-						console.log(error)
-					}
-					
-									 
-				}
+				
 
 
 
@@ -453,7 +417,7 @@
 			return {
 				month: '',
 				year: '',
-				slots: 0,
+				slots: [],
 				no_of_days: [],
 				blankdays: [],
 				no_of_booked_slots: 0,
@@ -514,9 +478,54 @@
 					this.month = today.getMonth();
 					this.year = today.getFullYear();
 					this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString();
-					console.log(entryIds)
-					
+					console.table(entryIds)
+					this.newSlotData()
 				},
+				async deleteSlot(id){
+					console.log(id)
+					let response
+					try{
+					response=await fetch('/delete/'+ id,{
+						method: 'DELETE'
+
+					 })
+					  var server=await response.json()
+						if(server.status === 200){
+					 		console.log(server.message)	
+							this.refreshTableBody()
+							this.newSlotData()
+							setTimeout(() => {
+								
+								 this.showSlots() }, 200);
+							
+						}
+						if(server.status === 400){
+							alert(server.message)
+							return false
+
+						}
+						if(server.status === 300){
+							alert(server.message)
+							return false
+
+						}
+					
+					}	catch(error){
+						alert('something went wrong')
+						console.log(error)
+						return false
+					}
+					
+									 
+				},
+				async newSlotData(){
+							let response=await fetch('/slots',{
+											method: 'GET'
+
+							})
+					slots=await response.json()
+					console.table(slots)			
+	            },
 				
 				getSlots(day){
 				
@@ -547,7 +556,9 @@
 					this.openEventModal = true;
 					this.event_date = new Date(this.year, this.month, date).toDateString();
 					this.event_day=date;
-				
+					this.refreshTableBody()
+					this.showSlots()
+					
 				},
 
 				addEvent() {
@@ -597,39 +608,84 @@
 					this.blankdays = blankdaysArray;
 					
 				},
-				 removeAllChildNodes(parent) {
-					 console.log('del')
-					while (parent.firstChild) {
-						parent.removeChild(parent.firstChild);
-					}
+				 refreshTableBody() {
+					var Table = document.getElementById("slots");
+					Table.innerHTML = "";
+					
+					
 				},
 				//async method to display slots without requiring page refresh
 				showSlots(){
-					
-						const element = document.getElementById("test");
+					console.log('in')
+						const element = document.getElementById("slots");
 						
-						{% for slot in slots %}
-						
-							if({{slot.slotdate| date('d')}} == this.event_day && (this.month+1) == {{slot.slotdate| date('m')}}){
-									
-							var newDiv = document.createElement("div");
-								element.appendChild(newDiv)
-								var innerDiv = document.createElement("div");
-									newDiv.appendChild(innerDiv)
-										innerDiv.className="mt-4 justify-around border-2 border-gray-200 rounded-lg  text-gray-700 bg-gray-200"
-										var text = document.createTextNode("{{slot.slottime|date('H:i:s')}}");
-										var del = document.createElement("button");
-										del.className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 border border-gray-700 rounded-lg shadow-sm"
-										del.value="delete"
-										//event listener for delete buttons
-										del.addEventListener("click", () => {
-											console.log("clicked element");
-										});
-										innerDiv.appendChild(text)
-										innerDiv.appendChild(del)
+						slots.forEach((slot, index) => { 
+							if(parseInt(slot.slotdate.split('-')[2]) == this.event_day && (this.month+1) == parseInt(slot.slotdate.split('-')[1])){
+								console.log(element)
+								var row = element.insertRow(0);
+									var cell1 = row.insertCell(0);
+										cell1.className="px-6 py-4"
+										var newDiv = document.createElement("div");
+										newDiv.className="flex items-center"
+										cell1.appendChild(newDiv)
+											var innerDiv = document.createElement("div");
+											innerDiv.className="ml-4"
+											newDiv.appendChild(innerDiv)
+												var innerInnerDiv = document.createElement("div");
+												innerInnerDiv.className=" font-xs text-gray-900"
+												innerInnerDiv.innerHTML=slot.slottime
+												innerDiv.appendChild(innerInnerDiv)
+
+									var cell2 = row.insertCell(1);
+										cell2.className="px-6 py-4"
+											var del = document.createElement("button");
+											del.className="bg-gray-800 hover:bg-red-600 text-white font-semibold py-2 px-4 border border-gray-700 rounded-lg shadow-sm"
+											del.addEventListener("click", () => {
+													this.deleteSlot(slot.id)
+														
+											});
+											del.innerHTML="Delete"
+											cell2.appendChild(del)
+
+									var cell3 = row.insertCell(2);
+										cell3.className="px-6 py-4"
+											if(parseInt(slot.booked)){
+												var booked = document.createElement("SPAN");
+												booked.className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
+												booked.innerHTML="booked"
+												cell3.appendChild(booked)
+											}
+											else{
+												var unbooked = document.createElement("SPAN");
+												unbooked.className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+												unbooked.innerHTML="unbooked"
+												cell3.appendChild(unbooked)
+
+											}
+										var cell4 = row.insertCell(3);
+											cell4.className="px-6 py-4"
+											var user = document.createElement("SPAN");
+												user.className="font-xs text-gray-900"
+												if(!slot.user )
+													user.innerHTML="--"
+												else
+													user.innerHTML=slot.user
+												cell4.appendChild(user)
+										var cell5 = row.insertCell(4);
+											cell5.className="px-6 py-4"
+											var category = document.createElement("SPAN");
+												category.className="font-xs text-gray-900"
+													if(!slot.category)
+														category.innerHTML="--"
+													else
+														user.innerHTML=slot.category
+												cell5.appendChild(category)
+
+														
 
 							}
-						{% endfor %}
+
+						} )
 
 				}
 			}

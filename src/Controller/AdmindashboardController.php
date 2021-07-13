@@ -192,6 +192,25 @@ class AdmindashboardController extends AbstractController
             'slots' => $slots
     ]);
 }
+#[Route('/slots', name: 'getSlots')]
+public function getSlots(Request $request){
+    $slots=$this->getDoctrine()->getRepository(Slot::class)->findAll();
+    $slotArray =  array();
+    foreach ($slots as $slot) {
+        $object = (object) [
+            'id' => $slot->getId(),
+            'booked' => $slot->getBooked(),
+            'slotdate' => $slot->getSlotDate()->format('Y-m-d'),
+            'slottime' => $slot->getSlotTime()->format('h:i:s'),
+            'category' => $slot->getCategory(),
+            'user' => $slot->getUser(),
+    ];
+        array_push($slotArray,$object);
+    }
+    $response=new Response();
+        $response->setContent(json_encode($slotArray));
+        return $response;
+}
 #[Route('/delete/{id}', name: 'deleteSlot')]
 
 public function delete(Request $request,$id){
@@ -199,9 +218,21 @@ public function delete(Request $request,$id){
     $slot= $this->getDoctrine()->getRepository(Slot::class) ->find($id);
     // get current date and time
     $dateNow= date('Y-m-d');
+    $time= date('H:i:s');
     $timeNow= date('H:i:s',strtotime("+30 minutes"));
-    if($dateNow < $slot->getSlotDate()->format('Y-m-d') || $dateNow == $slot->getSlotDate()->format('Y-m-d') && $timeNow < $slot->getSlotTime()->format('H:i:s')){
-        if(!$slot->getBooked()){
+    $previousHours=  $dateNow == $slot->getSlotDate()->format('Y-m-d') && $time > $slot->getSlotTime()->format('H:i:s');
+    
+    if($slot->getBooked()){
+        $response=new Response();
+        $response->setContent(json_encode([
+            'status' => 300,
+            'message' => 'booked slot'
+        ]));
+        return $response;
+
+    }
+    if($dateNow < $slot->getSlotDate()->format('Y-m-d') || $dateNow == $slot->getSlotDate()->format('Y-m-d') && $timeNow < $slot->getSlotTime()->format('H:i:s') ||  $previousHours ){
+        
                     $entityManager= $this->getDoctrine()->getManager();
                     $entityManager->remove($slot);
                     $entityManager->flush();
@@ -211,30 +242,23 @@ public function delete(Request $request,$id){
                         'message' => 'delete successful of slot with id '.$id
                     ]));
                     return $response;
-    }
-    else{
-                    $response=new Response();
-                    $response->setContent(json_encode([
-                        'status' => 300,
-                        'message' => 'booked slot'
-                    ]));
-                    return $response;
-
-    }
+    
+    
      }
      else{
-        $response=new Response();
-        if($dateNow > $slot->getSlotDate()->format('Y-m-d'))
-                $response->setContent(json_encode([
-                    'status' => 400,
-                    'message' => "Unable to delete the previous day's slots"
-                ]));
-        else
-                $response->setContent(json_encode([
-                    'status' => 400,
-                    'message' => 'Unable to delete after the 30 minutes gap'
-                ]));
-        return $response;
+                    $response=new Response();
+
+                    if($dateNow > $slot->getSlotDate()->format('Y-m-d'))
+                            $response->setContent(json_encode([
+                                'status' => 400,
+                                'message' => "Unable to delete the previous day's slots"
+                            ]));
+                    else
+                            $response->setContent(json_encode([
+                                'status' => 400,
+                                'message' => 'Unable to delete after the 30 minutes gap'
+                            ]));
+                    return $response;
 
      }
 
