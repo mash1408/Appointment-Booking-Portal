@@ -15,13 +15,14 @@
 		}
 	</style>
 	<nav class="flex items-center justify-between flex-wrap bg-gray-900 p-6">
-<p class="text-yellow-600  font-medium rounded-md text-2xl  font-semibold font family:allura ">Sim's Spa</p>
+<p class="text-green-600  font-medium rounded-md text-2xl  font-semibold font family:allura ">Sim's Spa</p>
 	<div x-data="{ showModal1: false}" :class="{'overflow-y-hidden': showModal1}">
     	<main class="flex flex-col sm:flex-row justify-end items-end">
 		<button class="justify-items-end bg-transparent  text-gray-500 font-semibold hover:text-white " @click="showModal1 = true">
 			Generate Slots
       </button>
 	  <a href="#" class="justify-items-center ml-8 bg-transparent text-gray-500 font-semibold hover:text-white">Ratings</a>
+	  <a href="/logout" class="justify-items-center ml-8 bg-transparent text-red-500 font-semibold hover:text-red-800">Logout</a>
 	  </main>
 	  
 	    <!-- Modal1 -->
