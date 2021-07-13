@@ -40,12 +40,6 @@ class AdmindashboardController extends AbstractController
     $form->handleRequest($request);
     $data=0;
     if ($form->isSubmitted()) {
-        // var_dump($adminform->getStartDate()->format('Y:m:d'));//to access start date
-        // var_dump($adminform->getEndDate()->format('Y:m:d'));//to access end date
-        // var_dump($adminform->getStartTime()->format('G:i'));//to access start Time
-        // var_dump($adminform->getEndTime()->format('G:i'));//to access end time
-        
-        ////////////////////////////////////////////
         $startmonth=intval($adminform->getStartDate()->format('m'));
         $startday=intval($adminform->getStartDate()->format('d'));
         
@@ -59,29 +53,21 @@ class AdmindashboardController extends AbstractController
 
         if($startmonth > $endmonth ){
             //error
-            echo "Start month Has to Less than End Month";
+            echo "<div class='bg-red-500 p-3 text-bold'>Start month Has to Less than End Month</div>";
         }
         if($startmonth == $endmonth ){
             if($startday > $endday ){
                 //error
-                echo "Start Day Has to Less than End Day";
+                echo "<div class='bg-red-500 p-3 text-bold'>Start Day Has to Less than End Day</div>";
             }
         }
         if($starthrs > $endhrs ){
             //error
-            echo "Start Hours Has to Less than End Hours";
+            echo "<div class='bg-red-500 p-3 text-bold'>Start Hours Has to Less than End Hours</div>";
         }
-        ///////////////////////////////
-        
-        // var_dump($startday);
-        // var_dump($endday);
-        // var_dump($endmin);
-        // var_dump($endhrs);
-        // print_r($endmin);
         $e =$startday;
         for($i = $startmonth ; $i<= $endmonth ;$i++)
         {
-            //$i = intval($i);
             if($i==01||$i==03||$i==05||$i==7||$i==8||$i==10||$i==12)
             {
                 $a = 31;
@@ -97,30 +83,20 @@ class AdmindashboardController extends AbstractController
             {   
                 for($j = $e ; $j<=$endday ;$j++)
                 { 
-                    //var_dump($j);
                     $start=intval($starthrs*60 + $startmin);
                     $end=intval($endhrs*60 + $endmin);
-                    // var_dump($start);
-                    //var_dump($j);
-                    //var_dump($i);
                     $dte = $j. "-" .$i."-2021";
                     //$dt = strtotime("3 1 2005");
                     $newDate = date("Y-m-d", strtotime($dte));
                     //var_dump($newDate);
                     for($k = $start ; $k<= $end-60 ;$k=$k+70)
                     {
-                        //var_dump($k);
                         $slothr=intval($k/60);
                         $slotmin=$k%60;
-                        // print_r($slothr);
-                        // echo ":";
-                        // print_r($slotmin);
-                        // echo " ";
                         $dt = $slothr. ":" .$slotmin.":00";
                         $newTime = date("h:i:s", strtotime($dt));
                         $date = \DateTime::createFromFormat('Y-m-d', $newDate);
                         $time = \DateTime::createFromFormat('h:i:s', $newTime);
-                        //var_dump($newTime);
                         $slot = new Slot();
                         $slot->setSlotDate($date);
                         $slot->setSlotTime($time);
@@ -134,30 +110,18 @@ class AdmindashboardController extends AbstractController
                 for($j = $e ; $j<=$a ;$j++)
                 { 
                     $e = 1;
-                    //var_dump($j);
                     $start=intval($starthrs*60 + $startmin);
                     $end=intval($endhrs*60 + $endmin);
-                    // var_dump($start);
-                    //var_dump($j);//day
-                    //var_dump($i);//month
                     $dte = $j. "-" .$i."-2021";
                     $newDate = date("Y-m-d", strtotime($dte));
-                    //var_dump($newDate);
                     for($k = $start ; $k<= $end-60 ;$k=$k+70)
                     {
-                        //var_dump($k);
                         $slothr=intval($k/60);
                         $slotmin=$k%60;
-                        // print_r($slothr);
-                        // echo ":";
-                        // print_r($slotmin);
-                        // echo " ";
                         $dt = $slothr. ":" .$slotmin.":00";
                         $newTime = date("h:i:s", strtotime($dt));
                         $date = \DateTime::createFromFormat('Y-m-d', $newDate);
                         $time = \DateTime::createFromFormat('h:i:s', $newTime);
-                        //var_dump($newTime);
-
                         $slot = new Slot();
                         $slot->setSlotDate($date);
                         $slot->setSlotTime($time);
@@ -170,11 +134,6 @@ class AdmindashboardController extends AbstractController
             }
             
         }
-
-
-        ///////////////////////////////////
-
- 
         /////////////////////////////
         // Online C++ compiler to run C++ program online
 
@@ -193,33 +152,32 @@ class AdmindashboardController extends AbstractController
         //             
         //             int st=(st*100)+smin,et=(eh*100)+emin;
         //              
-        //                      while(st<et)
-                            //      {      
-                            //         if(st+100<et)
-                            //            cout<<"::::"<<st;
-                            //            st=st+100;
-                            //            if(st%100>=51){
-                            //                // cout<<""
-                            //                remaining_time=60-st%100;
-                            //                int temp=st/100;
-                            //                temp=(temp*100)+100;
-                            //                st=(temp+remaining_time);
-                            //            }
-                            //            else{
-                                        
-                            //                st=st+10; 
-                            //                if(st%100==60){
-                            //                    int temp=st/100;
-                            //                    temp=(temp*100)+100;
-                            //                    st=temp;
-                            //                }
-                            //            }
-                            //            // cout<<"------------::::"<<st<<endl;
-                            //    }
-                                              
-        //             }
-        //                      }
-        // //             }
+        //       while(st<et)
+        //      {      
+        //         if(st+100<et)
+        //            cout<<"::::"<<st;
+        //            st=st+100;
+        //            if(st%100>=51){
+        //                // cout<<""
+        //                remaining_time=60-st%100;
+        //                int temp=st/100;
+        //                temp=(temp*100)+100;
+        //                st=(temp+remaining_time);
+        //            }
+        //            else{
+                    
+        //                st=st+10; 
+        //                if(st%100==60){
+        //                    int temp=st/100;
+        //                    temp=(temp*100)+100;
+        //                    st=temp;
+        //                }
+        //            }
+        //            // cout<<"------------::::"<<st<<endl;
+        //    }             
+        //  }
+        //  }
+        // }
         //  sd=1;
         // }
         // }
@@ -273,11 +231,6 @@ public function delete(Request $request,$id){
         return $response;
 
      }
-     
-    
-    
-    
-   
 
 }
 }
