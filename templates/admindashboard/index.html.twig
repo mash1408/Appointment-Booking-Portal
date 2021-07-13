@@ -92,12 +92,13 @@
     </div>
 	</div>
 	</nav>
-{# <div id="test" class="test">
-</div> #}
+{% for key,review in reviews %}
+{{review.comment_time}} 
 
+{% endfor %}
 
 {# pass slot data to javascript inorder to be able to access them  #}
-{% for slot in slots %}
+{% for key,slot in slots %}
 {% set entryInfo={
 	id: slot.id,
 	booked: slot.booked,
@@ -703,13 +704,15 @@
 											cell4.className="px-6 py-4"
 											var user = document.createElement("SPAN");
 												user.className="font-xs text-gray-900"
-												if(!slot.user )
-													user.innerHTML="--"
-												else
 													user.innerHTML=slot.user
 												cell4.appendChild(user)
-										
-
+											
+										var cell5= row.insertCell(4);
+											cell5.className="px-6 py-4"
+											var user = document.createElement("SPAN");
+												user.className="font-xs text-gray-900"
+													user.innerHTML=slot.category
+												cell5.appendChild(user)
 														
 
 							}
