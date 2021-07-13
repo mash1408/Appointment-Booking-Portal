@@ -192,6 +192,24 @@ class AdmindashboardController extends AbstractController
             'slots' => $slots
     ]);
 }
+#[Route('/slots', name: 'getSlots')]
+public function getSlots(Request $request){
+    $slots=$this->getDoctrine()->getRepository(Slot::class)->findAll();
+    $slotArray =  array();
+    foreach ($slots as $slot) {
+        $object = (object) [
+            'id' => $slot->getId(),
+            'booked' => $slot->getBooked(),
+            'slotdate' => $slot->getSlotDate()->format('Y-m-d'),
+            'slottime' => $slot->getSlotTime()->format('h:i:s'),
+            'category' => $slot->getCategory(),
+    ];
+        array_push($slotArray,$object);
+    }
+    $response=new Response();
+        $response->setContent(json_encode($slotArray));
+        return $response;
+}
 #[Route('/delete/{id}', name: 'deleteSlot')]
 
 public function delete(Request $request,$id){
