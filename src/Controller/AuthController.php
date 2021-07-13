@@ -17,6 +17,13 @@ class AuthController extends AbstractController
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('target_path');
         // }
+        if ($this->isGranted('ROLE_ADMIN')){
+            return $this->redirectToRoute('admindashboard');
+        }
+        elseif($this->isGranted('ROLE_USER')){
+            return $this->redirectToRoute('home');
+        }
+        else{
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -24,6 +31,7 @@ class AuthController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        }
     }
 
     /**
