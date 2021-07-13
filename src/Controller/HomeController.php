@@ -173,5 +173,32 @@ class HomeController extends AbstractController
         }
         return $this->render('home/reviews.html.twig',['review_form'=> $form->createView(), 'ratings'=>$reviewsArray, 'hasReviewed'=>$userReviewed]);
     }
-}
+    
+         
+    #[Route('/appointment/{userid}', name: 'appointment')]
+    public function appointment(Request $request,$userid)
+    /**
+     * @Route("/home/appointment/{$userid}", name="appointment")
+     */
+ {
+     
+     $userid =$this->getDoctrine()
+     ->getRepository(user::class)
+     ->findOneBy(['id' => $userid]);
 
+    //  $slots =$this->getDoctrine()
+    //  ->getRepository(slot::class)
+    //  ->findOneBy(['id' => $slotid]);
+
+    //  $entityManager = $this->getDoctrine()->getManager();
+    //  $slotid=$entityManager ->getRepository(Slot::class)
+    //                         ->findOneBy(['id'=> $slotid]);
+
+     //  return new Response('username:',$userid->getUsername($userid));
+    // $slots = $entityManager->getRepository(Slot::class)->find($slotid);
+           
+ 
+    return $this->render('home/appointment.html.twig',['userid'=> $userid]);
+ }
+
+}
