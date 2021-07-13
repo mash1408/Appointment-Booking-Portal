@@ -200,34 +200,40 @@ public function delete(Request $request,$id){
     // get current date and time
     $dateNow= date('Y-m-d');
     $timeNow= date('H:i:s',strtotime("+30 minutes"));
-    if($dateNow < $slot->getSlotDate() || $dateNow == $slot->getSlotDate() && $timeNow < $slot->getSlotTime()->format('H:i:s')){
+    if($dateNow < $slot->getSlotDate()->format('Y-m-d') || $dateNow == $slot->getSlotDate()->format('Y-m-d') && $timeNow < $slot->getSlotTime()->format('H:i:s')){
         if(!$slot->getBooked()){
-        $entityManager= $this->getDoctrine()->getManager();
-        $entityManager->remove($slot);
-        $entityManager->flush();
-        $response=new Response();
-        $response->setContent(json_encode([
-            'status' => 200,
-            'message' => 'delete successful of slot with id '.$id
-        ]));
-        return $response;
+                    $entityManager= $this->getDoctrine()->getManager();
+                    $entityManager->remove($slot);
+                    $entityManager->flush();
+                    $response=new Response();
+                    $response->setContent(json_encode([
+                        'status' => 200,
+                        'message' => 'delete successful of slot with id '.$id
+                    ]));
+                    return $response;
     }
     else{
-        $response=new Response();
-        $response->setContent(json_encode([
-            'status' => 300,
-            'message' => 'booked slot'
-        ]));
-        return $response;
+                    $response=new Response();
+                    $response->setContent(json_encode([
+                        'status' => 300,
+                        'message' => 'booked slot'
+                    ]));
+                    return $response;
 
     }
      }
      else{
         $response=new Response();
-        $response->setContent(json_encode([
-            'status' => 400,
-            'message' => 'Unable to delete after the 30 minutes gap'
-        ]));
+        if($dateNow > $slot->getSlotDate()->format('Y-m-d'))
+                $response->setContent(json_encode([
+                    'status' => 400,
+                    'message' => "Unable to delete the previous day's slots"
+                ]));
+        else
+                $response->setContent(json_encode([
+                    'status' => 400,
+                    'message' => 'Unable to delete after the 30 minutes gap'
+                ]));
         return $response;
 
      }
