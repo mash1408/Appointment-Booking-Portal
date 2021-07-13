@@ -21,16 +21,16 @@ class LandingpageController extends AbstractController
     #[Route('/', name: 'landingpage')]
     public function new():Response
     {
-        if ($this->isGranted('ROLE_ADMIN')){
-            return $this->redirectToRoute('admindashboard');
-        }
-        elseif($this->isGranted('ROLE_USER')){
-            return $this->redirectToRoute('home');
-        }
-        else{
+        // if ($this->isGranted('ROLE_ADMIN')){
+        //     return $this->redirectToRoute('admindashboard');
+        // }
+        // elseif($this->isGranted('ROLE_USER')){
+        //     return $this->redirectToRoute('home');
+        // }
+        // else{
         return $this->render('landingpage/index.html.twig', [
             'controller_name' => 'LandingpageController',
         ]);
-    }
+    // }
     }
 }
