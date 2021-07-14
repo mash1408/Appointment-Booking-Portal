@@ -52,7 +52,10 @@ class HomeController extends AbstractController
             'Haircut' => 'Haircut',
             'Shaving' => 'Shaving',
             'Massage' => 'Massage',
-            'Trimming' => 'Trimming',
+            'Waxing' => 'Waxing',
+            'Pedicure' => 'Pedicure',
+            'Manicure' => 'Manicure',
+            'Tanning' => 'Tanning',
             'Facial' => 'Facial',
             ],'label' => 'Select your service:',])
         ->add('id', IntegerType::class)
@@ -130,6 +133,11 @@ class HomeController extends AbstractController
                 'Haircut' => 'Haircut',
                 'Shaving' => 'Shaving',
                 'Massage' => 'Massage',
+                'Waxing' => 'Waxing',
+                'Pedicure' => 'Pedicure',
+                'Manicure' => 'Manicure',
+                'Tanning' => 'Tanning',
+                'Facial' => 'Facial',
             ],
             'label' => 'Select a category',])
             ->add('userid', IntegerType::class)
@@ -142,8 +150,8 @@ class HomeController extends AbstractController
             $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['id' => $uid]);
 
             date_default_timezone_set('Asia/Kolkata');
-            $currentDate = date('m/d/Y h:i:s');
-            $commented_at = \DateTime::createFromFormat('m/d/Y h:i:s', $currentDate);
+            $currentDate = date('m/d/Y h:i:s a');
+            $commented_at = \DateTime::createFromFormat('m/d/Y h:i:s a', $currentDate);
 
             $review = new Review();
             $review->setRating($form["rating"]->getData());

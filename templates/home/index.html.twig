@@ -52,8 +52,9 @@
     </div>
     
     {% else %}
-        <div class="mt-20 flex justify-center">
-            <h1 class="text-4xl">Sorry! No Slots Available for this Day =(</h1>
+        <div class="flex flex-col justify-center items-center h-screen">
+            <h1 class="text-2xl text-gray-500 font-semibold -mt-36">Sorry, we are not available for this day :(</h1>
+            <a href="/home" class="mt-5 px-3 py-1 bg-green-500 text-white hover:bg-green-600 rounded text-lg">Pick another date</a>
         </div>
     {% endif %}
 
@@ -67,8 +68,8 @@
       <!-- Add margin if you want to see some of the overlay behind the modal-->
       <div class="modal-content py-4 text-left px-6">
         <!--Title-->
-        <div class="flex justify-between items-center pb-3">
-          <p class="text-2xl font-bold">Book your slot</p>
+        <div class="flex justify-between items-center pb-3 mb-5">
+          <p class="text-2xl text-center w-full font-semibold">Confirm your slot</p>
           <div class="modal-close cursor-pointer z-50">
           </div>
         </div>
@@ -76,32 +77,34 @@
         <!--Body-->
         <div class="flex flex-col">
             {{ form_start(booking_form) }}
-
-              <div class="flex justify-around mb-3 border-b-2 rounded-lg border-green-500 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg text-center">
-                User ID : {{app.user.id}}
-              </div>
-
-              <div class="flex justify-around mb-3 border-b-2 rounded-lg border-green-500 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg text-center">
+              <div class="flex text-gray-500 justify-around mb-3 border-b-2 rounded-lg border-green-500 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg text-center">
                 Name : {{app.user.name}}
               </div>
 
-              <div class="flex justify-around mb-3 border-b-2 rounded-lg border-green-500 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg text-center">
+              <div class="flex text-gray-500 justify-around mb-3 border-b-2 rounded-lg border-green-500 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg text-center">
                 Phone Number : {{app.user.phone}}
               </div>
 
-              <div class="flex justify-around mb-3 border-b-2 rounded-lg border-green-500 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg text-center">
+              <div class="flex text-gray-500 justify-around mb-3 border-b-2 rounded-lg border-green-500 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg text-center">
                 Email : {{app.user.email}}
+              </div>
+
+              <div id="book-date" class="flex text-gray-500 justify-around mb-3 border-b-2 rounded-lg border-green-500 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg text-center">                
+              </div>
+
+              <div id="book-time" class="flex text-gray-500 justify-around mb-3 border-b-2 rounded-lg border-green-500 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg text-center">                
               </div>
 
               <div class="flex justify-center mb-3 border-b-2 rounded-lg border-green-500 font-display focus:outline-none focus:border-primarycolor transition-all duration-500 text-lg">
                 {{ form_label(booking_form.category) }}
-                {{ form_widget(booking_form.category) }}
+                {{ form_widget(booking_form.category, {'attr': {'class': 'border-2 ml-3 rounded focus:border-green-500'}}) }}
               </div>
 
               <div class="text-lg text-center flex justify-center">
               {{ form_widget(booking_form.save,{'attr':{'class':'bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded mt-2'}}) }}
               </div>
 
+               {{ form_widget(booking_form.id, {'attr': {'hidden':'true'} }) }} 
             {{ form_end(booking_form) }}
         </div>
         
@@ -194,6 +197,11 @@
     for(let i=0; i<document.getElementsByClassName("book-slot").length; i++){
         document.getElementsByClassName("book-slot")[i].addEventListener("click", function(e){
             document.getElementById("form_id").value = e.target.value;
+            {% if slots %}
+                document.getElementById('book-date').innerHTML = "Date: {{ slots[0][1] | date('d F Y') }}"
+            {% endif %}
+          console.log(e.target.previousElementSibling)
+          document.getElementById('book-time').innerHTML = e.target.previousElementSibling.innerHTML;
         })
     }
 }
