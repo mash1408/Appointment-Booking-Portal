@@ -52,8 +52,9 @@
     </div>
     
     {% else %}
-        <div class="mt-20 flex justify-center">
-            <h1 class="text-4xl">Sorry! No Slots Available for this Day =(</h1>
+        <div class="flex flex-col justify-center items-center h-screen">
+            <h1 class="text-2xl text-gray-500 font-semibold -mt-36">Sorry, we are not available for this day :(</h1>
+            <a href="/home" class="mt-5 px-3 py-1 bg-green-500 text-white hover:bg-green-600 rounded text-lg">Pick another date</a>
         </div>
     {% endif %}
 

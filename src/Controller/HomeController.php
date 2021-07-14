@@ -142,8 +142,8 @@ class HomeController extends AbstractController
             $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['id' => $uid]);
 
             date_default_timezone_set('Asia/Kolkata');
-            $currentDate = date('m/d/Y h:i:s');
-            $commented_at = \DateTime::createFromFormat('m/d/Y h:i:s', $currentDate);
+            $currentDate = date('m/d/Y h:i:s a');
+            $commented_at = \DateTime::createFromFormat('m/d/Y h:i:s a', $currentDate);
 
             $review = new Review();
             $review->setRating($form["rating"]->getData());
