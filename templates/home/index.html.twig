@@ -197,7 +197,9 @@
     for(let i=0; i<document.getElementsByClassName("book-slot").length; i++){
         document.getElementsByClassName("book-slot")[i].addEventListener("click", function(e){
             document.getElementById("form_id").value = e.target.value;
-          document.getElementById('book-date').innerHTML = "Date: {{ slots[0][1] | date('d F Y') }}";
+            {% if slots %}
+                document.getElementById('book-date').innerHTML = "Date: {{ slots[0][1] | date('d F Y') }}"
+            {% endif %}
           console.log(e.target.previousElementSibling)
           document.getElementById('book-time').innerHTML = e.target.previousElementSibling.innerHTML;
         })
