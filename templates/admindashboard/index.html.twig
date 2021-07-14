@@ -103,10 +103,15 @@
 	id: slot.id,
 	booked: slot.booked,
 	dateDay: slot.slotdate|date('d'),
-	dateMonth: slot.slotdate|date('m')
+	dateMonth: slot.slotdate|date('m'),
+	minutes: slot.slottime|date('i'),
+	hour: slot.slottime|date('H')
 }%}
     <a  data-entry-info="{{ entryInfo|json_encode }}"></a>
 {% endfor %}
+
+  
+  
 
 <div class="antialiased sans-serif bg-gray-400 h-screen   ">
 	<div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
@@ -174,6 +179,8 @@
 							<div style="width: 14.28%; height: 120px" class=" px-4 pt-2 border-r border-b relative transition ease-in-out duration-100 delay-100"
 								:class="{'bg-red-200 border-gray-500' : date.unbooked === 0 && date.booked !== 0, 'bg-green-200 border-gray-500' : date.unbooked!== 0}">
 
+
+
 								<div
 									@click="showEventModal(date.day)"
 									x-text="date.day"
@@ -181,6 +188,30 @@
 									class=" inline-flex w-6 h-6 items-center justify-center cursor-pointer text-center leading-none rounded-full transition ease-in-out duration-100"
 									:class="{'bg-blue-400 text-white': isToday(date.day) == true, 'hover:bg-blue-200': isToday(date) == false }"	
 								></div>
+
+
+
+							<div x-show="isToday(date.day)" style="height: 80px;" class="overflow-y-auto mt-1">
+									<p>Upcoming</p>
+									<template x-for="(day,index) in deletable" :key="index">
+									
+									<div
+									x-show="day.show"
+									:class="{'bg-blue-400 text-white': isToday(date.day) == true, 'hover:bg-blue-200': isToday(date) == false }"
+											class="px-2 py-1 rounded-lg mt-1 overflow-hidden border border-white-200 text-white-800 bg-white-100"		
+									>
+											
+											<p  class="text-sm truncate leading-tight" x-text="day.time">
+											</p>
+											<button @click="toggleNext()">></button>
+											<button @click="deleteSlot(day.id)">x</button>
+											
+										</div>
+									</template>
+								</div>
+							
+  
+ 
 
 								<div style="height: 80px;" class="overflow-y-auto mt-1 " 
 								x-show="!(date.booked === 0 && date.unbooked === 0)"
@@ -434,6 +465,7 @@
 				year: '',
 				no_of_days: [],
 				blankdays: [],
+				deletable: [],
 				no_of_booked_slots: 0,
 				no_of_unbooked_slots: 0,
 				event_day:0,
@@ -493,7 +525,19 @@
 					this.year = today.getFullYear();
 					this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString();
 					console.table(entryIds)
-					
+				},
+				toggleNext(){
+					var start
+					this.deletable.forEach((element,index) =>{
+						if(element.show)
+							start=index						
+					})
+					if(start+1 === this.deletable.length){
+						this.deletable[0].show=true
+						this.deletable[start].show=false
+					}
+					this.deletable[start].show=false
+					this.deletable[start+1].show=true
 				},
 				async deleteSlot(id){
 					console.log(id)
@@ -624,6 +668,23 @@
 					}
 					this.no_of_days=[]
 					let daysArray = {};
+					var today= new Date()
+					let deleteArray=[]
+					
+						entryIds.forEach((element) => { 
+							 
+							var filter=(today.getHours() * 60 + today.getMinutes()+30) <( parseInt(element.minutes)+parseInt(element.hour)*60)
+							console.log(filter)
+							if(!parseInt(element.booked))
+							if(this.isToday(parseInt(element.dateDay)) && parseInt(element.dateMonth)===this.month+1  && filter  )
+								{	if(this.deletable.length === 0)
+										this.deletable.push({'time': element.hour +'-'+ element.minutes, 'show': true,'id': element.id })
+									else
+										this.deletable.push({'time': element.hour+'-' + element.minutes , 'show': false, 'id': element.id  })
+								}
+					} )
+					
+					console.log(this.deletable)
 					for ( var i=1; i <= daysInMonth; i++) {
 						daysArray = {};
 						daysArray['day']=i;
@@ -632,8 +693,10 @@
 						this.getSlots(i)
 						daysArray['booked']=this.no_of_booked_slots
 						daysArray['unbooked']=this.no_of_unbooked_slots
+						
+
 					}
-					console.table(this.no_of_days)
+					console.log(JSON.stringify(this.no_of_days))
 					this.blankdays = blankdaysArray;
 					
 				},
