@@ -54,6 +54,7 @@ class AdmindashboardController extends AbstractController
         $endmin=intval($adminform->getEndTime()->format('i'));
         
 
+
         if($startmonth > $endmonth ){
             //error
             echo "<div class='bg-red-500 p-3 text-bold'>Start month Has to Less than End Month</div>";
@@ -97,9 +98,10 @@ class AdmindashboardController extends AbstractController
                         $slothr=intval($k/60);
                         $slotmin=$k%60;
                         $dt = $slothr. ":" .$slotmin.":00";
-                        $newTime = date("h:i:s", strtotime($dt));
+                        $newTime = date("G:i:s", strtotime($dt));
                         $date = \DateTime::createFromFormat('Y-m-d', $newDate);
-                        $time = \DateTime::createFromFormat('h:i:s', $newTime);
+                        $time = \DateTime::createFromFormat('G:i:s', $newTime);
+                        //print_r($time);
                         $slot = new Slot();
                         $slot->setSlotDate($date);
                         $slot->setSlotTime($time);
@@ -122,9 +124,9 @@ class AdmindashboardController extends AbstractController
                         $slothr=intval($k/60);
                         $slotmin=$k%60;
                         $dt = $slothr. ":" .$slotmin.":00";
-                        $newTime = date("h:i:s", strtotime($dt));
+                        $newTime = date("G:i:s", strtotime($dt));
                         $date = \DateTime::createFromFormat('Y-m-d', $newDate);
-                        $time = \DateTime::createFromFormat('h:i:s', $newTime);
+                        $time = \DateTime::createFromFormat('G:i:s', $newTime);
                         $slot = new Slot();
                         $slot->setSlotDate($date);
                         $slot->setSlotTime($time);
