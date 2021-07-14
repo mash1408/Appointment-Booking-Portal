@@ -52,6 +52,8 @@ class HomeController extends AbstractController
             'Haircut' => 'Haircut',
             'Shaving' => 'Shaving',
             'Massage' => 'Massage',
+            'Trimming' => 'Trimming',
+            'Facial' => 'Facial',
             ],'label' => 'Select your service:',])
         ->add('id', IntegerType::class)
         ->add('save',SubmitType::class)

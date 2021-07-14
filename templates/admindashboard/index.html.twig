@@ -92,12 +92,13 @@
     </div>
 	</div>
 	</nav>
-{# <div id="test" class="test">
-</div> #}
+{% for key,review in reviews %}
+{{review.comment_time}} 
 
+{% endfor %}
 
 {# pass slot data to javascript inorder to be able to access them  #}
-{% for slot in slots %}
+{% for key,slot in slots %}
 {% set entryInfo={
 	id: slot.id,
 	booked: slot.booked,
@@ -389,7 +390,40 @@
 
 				
 
-		
+		var today = new Date();
+		var dr = document.getElementById("form_start_date_day");
+		var de = document.getElementById("form_end_date_day");
+
+		var mr = document.getElementById("form_start_date_month");
+		var me = document.getElementById("form_end_date_month");
+
+		dr.value=today.getDate().toString()
+		de.value=today.getDate().toString()
+		mr.value=(today.getMonth()+1).toString()
+		me.value=(today.getMonth()+1).toString()
+
+		 var op = document.getElementById("form_start_date_day").getElementsByTagName("option");
+		 var oe = document.getElementById("form_end_date_day").getElementsByTagName("option");
+		for (var i = 0; i < op.length && i < today.getDate()-1; i++) {
+				 op[i].disabled = true 
+				 oe[i].disabled = true 
+		}
+		var om = document.getElementById("form_start_date_month").getElementsByTagName("option");
+		 var ome = document.getElementById("form_end_date_month").getElementsByTagName("option");
+		for (var i = 0; i < op.length && i < today.getMonth(); i++) {
+				 om[i].disabled = true 
+				 ome[i].disabled = true 
+		}
+		var oy = document.getElementById("form_start_date_year").getElementsByTagName("option");
+		 var oye = document.getElementById("form_end_date_year").getElementsByTagName("option");
+		let inc=0
+		for (var i = oy[0].value; i <  today.getFullYear(); i++) {
+				 	
+				 oy[inc].disabled = true 
+
+				 oye[inc].disabled = true 
+				 inc+=1
+		}
 		var yr = document.getElementById("form_start_date_year");
 		yr.value='2021';
 		//yr.setAttribute("read-only", "true");
@@ -670,21 +704,15 @@
 											cell4.className="px-6 py-4"
 											var user = document.createElement("SPAN");
 												user.className="font-xs text-gray-900"
-												if(!slot.user )
-													user.innerHTML="--"
-												else
 													user.innerHTML=slot.user
 												cell4.appendChild(user)
-										var cell5 = row.insertCell(4);
+											
+										var cell5= row.insertCell(4);
 											cell5.className="px-6 py-4"
-											var category = document.createElement("SPAN");
-												category.className="font-xs text-gray-900"
-													if(!slot.category)
-														category.innerHTML="--"
-													else
-														user.innerHTML=slot.category
-												cell5.appendChild(category)
-
+											var user = document.createElement("SPAN");
+												user.className="font-xs text-gray-900"
+													user.innerHTML=slot.category
+												cell5.appendChild(user)
 														
 
 							}

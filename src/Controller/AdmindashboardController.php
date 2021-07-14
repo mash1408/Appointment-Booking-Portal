@@ -3,7 +3,10 @@
 namespace App\Controller;
 use App\Entity\AdminForm;
 use App\Entity\Slot;
+use App\Entity\Review;
+use App\Entity\User;
 use App\Form\AdminSlotsType;
+use Doctrine\Common\Collections\Expr\Value;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
@@ -187,23 +190,69 @@ class AdmindashboardController extends AbstractController
     }
     //get all the slots from db
     $slots=$this->getDoctrine()->getRepository(Slot::class)->findAll();
-        return $this->render('admindashboard/index.html.twig', [
-            'adminslot' => $form->createView(),
-            'slots' => $slots
-    ]);
-}
-#[Route('/slots', name: 'getSlots')]
-public function getSlots(Request $request){
-    $slots=$this->getDoctrine()->getRepository(Slot::class)->findAll();
+    $reviews=$this->getDoctrine()->getRepository(Review::class)->findAll();
     $slotArray =  array();
+    $reviewArray =  array();
+    foreach ($reviews as $review) {
+        if($review->getUser() == NULL)
+            $userid= NULL;
+        else
+        $userid = $review->getUser()->getName();
+       
+        $object = (object) [
+            'id' => $review->getId(),
+            'comments' => $review->getId(),
+            'user' => $review->getId(),
+            'rating' => $review->getRating(),
+            'comment_time' => $review->getCommentedAt()->format('Y-m-d H:i:s'),
+            
+    ];
+        array_push($reviewArray,$object);
+    }
+    
+
     foreach ($slots as $slot) {
+        if($slot->getUser() == NULL)
+            $userid= NULL;
+        else
+        $userid = $slot->getUser()->getName();
+       
         $object = (object) [
             'id' => $slot->getId(),
             'booked' => $slot->getBooked(),
             'slotdate' => $slot->getSlotDate()->format('Y-m-d'),
             'slottime' => $slot->getSlotTime()->format('h:i:s'),
             'category' => $slot->getCategory(),
-            'user' => $slot->getUser(),
+            'user' => $userid,
+    ];
+        array_push($slotArray,$object);
+    }
+   
+        return $this->render('admindashboard/index.html.twig', [
+            'adminslot' => $form->createView(),
+            'slots' => $slotArray,
+            'reviews' => $reviewArray
+    ]);
+}
+#[Route('/slots', name: 'getSlots')]
+public function getSlots(Request $request){
+    $slots=$this->getDoctrine()->getRepository(Slot::class)->findAll();
+    $slotArray =  array();
+    
+    foreach ($slots as $slot) {
+        if($slot->getUser() == NULL)
+            $userid= NULL;
+        else
+        $userid = $slot->getUser()->getName();
+       
+  
+        $object = (object) [
+            'id' => $slot->getId(),
+            'booked' => $slot->getBooked(),
+            'slotdate' => $slot->getSlotDate()->format('Y-m-d'),
+            'slottime' => $slot->getSlotTime()->format('h:i:s'),
+            'category' => $slot->getCategory(),
+            'user' => $userid,
     ];
         array_push($slotArray,$object);
     }
