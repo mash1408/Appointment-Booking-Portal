@@ -66,12 +66,28 @@
 
   {% for rating in ratings %}
     <div>
-        <span>{{rating[1]}}</span>
-        <span>{{rating[2]|date("F jS g:ia") }}</span>
+        <span>{{rating[1]}}</span>  <!-- Displaying name --> 
+
+        {% set currentDate = date()|date('Y-m-d H:i:s', "Asia/Kolkata") %}  <!-- Displaying date -->
+        {% set difference = date(currentDate).diff(date(rating[2])) %}
+
+        {% if difference.y != 0 %}
+        <span>{{ difference.y}}  {{ difference.y == 1 ? 'year ago' : 'years ago'}}</span>
+        {% elseif difference.m != 0 %}
+        <span>{{ difference.m}} {{ difference.m == 1 ? 'month ago' : 'months ago'}}</span>
+        {% elseif difference.d != 0 %}
+        <span>{{difference.d }} {{ difference.d == 1 ? 'day ago' : 'days ago'}}</span>
+        {% elseif difference.h != 0 %}
+        <span>{{ difference.h}} {{ difference.h == 1 ? 'hour ago' : 'hours ago'}}</span>
+        {% elseif difference.i != 0 %}
+        <span>{{ difference.i}} {{ difference.i == 1 ? 'minute ago' : 'minutes ago'}}</span>
+        {% else %}
+        <span>{{ difference.s }} {{ difference.s == 1 ? 'second ago' : 'seconds ago'}}</span>
+        {% endif %}
     </div>
 
     <div>
-    {% if rating[3] == 1 %}
+    {% if rating[3] == 1 %}    <!-- Displaying rating -->
         <div>
             <span id="1star" class="fa fa-star  text-yellow-500"></span>
             <span id="2star" class="fa fa-star text-gray-500"></span>
@@ -118,9 +134,9 @@
     {% endif %}
     </div>
 
-    <p>{{rating[4]}}</p>
-    <p>{{rating[5]}}</p>
-    <p>{{rating[6]}}</p>
+    <p>{{rating[4]}}</p>    <!-- Displaying category -->
+    <p>{{rating[5]}}</p>    <!-- Displaying comment -->
+    <p>{{rating[6]}}</p>    <!-- Displaying reply -->
   {% endfor %}
 {% endblock %}
 
