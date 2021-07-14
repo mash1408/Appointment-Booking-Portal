@@ -291,10 +291,10 @@
 												Status
 											</th>
 											<th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-												Customer Name
+												Category Booked
 											</th>
 											<th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-												Category Booked
+												Customer 
 											</th>
 											<th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
 												Phone Number
@@ -643,6 +643,20 @@
 					
 					
 				},
+				//helper method
+				createDiv(text){
+					var newDiv = document.createElement("div");
+					newDiv.className="flex items-center"
+					
+					var innerDiv = document.createElement("div");
+					innerDiv.className="ml-4"
+					newDiv.appendChild(innerDiv)
+					var innerInnerDiv = document.createElement("div");
+					innerInnerDiv.className=" font-xs text-gray-900"
+					innerInnerDiv.innerHTML=text
+					innerDiv.appendChild(innerInnerDiv)
+					return newDiv
+				},
 				//async method to display slots without requiring page refresh
 				showSlots(){
 					console.log('in')
@@ -653,16 +667,7 @@
 								var row = element.insertRow(index);
 									var cell1 = row.insertCell(0);
 										cell1.className="px-6 py-4"
-										var newDiv = document.createElement("div");
-										newDiv.className="flex items-center"
-										cell1.appendChild(newDiv)
-											var innerDiv = document.createElement("div");
-											innerDiv.className="ml-4"
-											newDiv.appendChild(innerDiv)
-												var innerInnerDiv = document.createElement("div");
-												innerInnerDiv.className=" font-xs text-gray-900"
-												innerInnerDiv.innerHTML=slot.slottime
-												innerDiv.appendChild(innerInnerDiv)
+										cell1.appendChild(this.createDiv(slot.slottime))
 
 									var cell2 = row.insertCell(1);
 										cell2.className="px-6 py-4"
@@ -690,27 +695,18 @@
 												cell3.appendChild(unbooked)
 
 											}
-										var cell4 = row.insertCell(3);
-											cell4.className="px-6 py-4"
-											var user = document.createElement("SPAN");
-												user.className="font-xs text-gray-900"
-													if(slot.user)
-														user.innerHTML=slot.user.toString()
-													else
-														user.innerHTML="---u-"
-												cell4.appendChild(user)
-											
-										var cell5= row.insertCell(3);
-											cell5.className="px-6 py-4"
-											var category = document.createElement("SPAN");
-												category.className="font-xs text-gray-900"
-													if(slot.category)
-														user.innerHTML=slot.category.toString()
-													else
-														user.innerHTML="----c"
-												cell5.appendChild(category)
+									var cell4 = row.insertCell(3);
+										cell4.className="px-6 py-4"
+										cell4.appendChild(this.createDiv(slot.category? slot.category :'---'))	
+									
+									var cell5 = row.insertCell(4);
+										cell5.className="px-6 py-4"
+										cell5.appendChild(this.createDiv(slot.user? slot.user: '---'))
 										
-														
+									var cell6 = row.insertCell(5);
+										cell6.className="px-6 py-4"
+										
+										cell6.appendChild(this.createDiv(slot.phoneNumber?slot.phoneNumber: '---'))				
 
 							
 
