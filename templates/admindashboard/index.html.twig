@@ -411,9 +411,30 @@
 		var om = document.getElementById("form_start_date_month").getElementsByTagName("option");
 		 var ome = document.getElementById("form_end_date_month").getElementsByTagName("option");
 		for (var i = 0; i < op.length && i < today.getMonth(); i++) {
+			
 				 om[i].disabled = true 
 				 ome[i].disabled = true 
 		}
+		
+				mr.addEventListener("change", function(e) {
+					if(om[today.getMonth()].selected)
+						for (var i = 0; i < op.length && i < today.getDate()-1; i++) 
+								op[i].disabled = true 	
+				for(var i=today.getMonth()+1; i < 12; i++)
+					if(om[i].selected)
+						for (var i = 0; i < op.length && i < today.getDate()-1; i++) 
+									op[i].disabled = false
+				
+				});
+				me.addEventListener("change", function(e) {
+						if(ome[today.getMonth()].selected)
+						for (var i = 0; i < oe.length && i < today.getDate()-1; i++) 
+								oe[i].disabled = true 	
+				for(var i=today.getMonth()+1; i < 12; i++)
+					if(ome[i].selected)
+						for (var i = 0; i < oe.length && i < today.getDate()-1; i++) 
+									oe[i].disabled = false
+				});
 		var oy = document.getElementById("form_start_date_year").getElementsByTagName("option");
 		 var oye = document.getElementById("form_end_date_year").getElementsByTagName("option");
 		let inc=0

@@ -234,9 +234,10 @@ class AdmindashboardController extends AbstractController
             'reviews' => $reviewArray
     ]);
 }
-#[Route('/slots', name: 'getSlots')]
-public function getSlots(Request $request){
-    $slots=$this->getDoctrine()->getRepository(Slot::class)->findAll();
+#[Route('/slots/{date}', name: 'getSlots')]
+public function getSlots(Request $request,$date='date'){
+    $dateobj =  \DateTime::createFromFormat("Y-m-d",$date);
+    $slots = $this->getDoctrine()->getRepository(Slot::class)->findBy(['slot_date' => $dateobj]);
     $slotArray =  array();
     
     foreach ($slots as $slot) {
