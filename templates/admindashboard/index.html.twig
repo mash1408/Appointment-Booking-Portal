@@ -538,7 +538,7 @@
 					this.year = today.getFullYear();
 					this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString();
 					console.table(entryIds)
-					this.newSlotData()
+					
 				},
 				async deleteSlot(id){
 					console.log(id)
@@ -578,11 +578,14 @@
 									 
 				},
 				async newSlotData(){
-							let response=await fetch('/slots',{
+					
+							let response=await fetch('/slots/'+this.year.toString()+'-'+(this.month+1).toString()
+							+'-'+this.event_day.toString(),{
 											method: 'GET'
 
 							})
 					slots=await response.json()
+					
 					console.table(slots)			
 	            },
 				
@@ -615,8 +618,12 @@
 					this.openEventModal = true;
 					this.event_date = new Date(this.year, this.month, date).toDateString();
 					this.event_day=date;
+					this.newSlotData()
 					this.refreshTableBody()
-					this.showSlots()
+					setTimeout(() => {
+								
+					 this.showSlots() }, 500);
+					
 					
 				},
 
@@ -679,7 +686,7 @@
 						const element = document.getElementById("slots");
 						
 						slots.forEach((slot, index) => { 
-							if(parseInt(slot.slotdate.split('-')[2]) == this.event_day && (this.month+1) == parseInt(slot.slotdate.split('-')[1])){
+							
 								console.log(element)
 								var row = element.insertRow(0);
 									var cell1 = row.insertCell(0);
@@ -736,7 +743,7 @@
 												cell5.appendChild(user)
 														
 
-							}
+							
 
 						} )
 
