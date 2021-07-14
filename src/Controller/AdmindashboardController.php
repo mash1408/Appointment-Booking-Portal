@@ -253,7 +253,7 @@ public function getSlots(Request $request,$date='date'){
             'id' => $slot->getId(),
             'booked' => $slot->getBooked(),
             'slotdate' => $slot->getSlotDate()->format('Y-m-d'),
-            'slottime' => $slot->getSlotTime()->format('h:i:s'),
+            'slottime' => $slot->getSlotTime()->format('H:i:s'),
             'category' => $slot->getCategory(),
             'user' => $userid,
     ];
@@ -283,7 +283,7 @@ public function delete(Request $request,$id){
         return $response;
 
     }
-    if($dateNow < $slot->getSlotDate()->format('Y-m-d') || $dateNow == $slot->getSlotDate()->format('Y-m-d') && $timeNow < $slot->getSlotTime()->format('H:i:s') ||  $previousHours ){
+    if($dateNow < $slot->getSlotDate()->format('Y-m-d') || $dateNow == $slot->getSlotDate()->format('Y-m-d') && $timeNow < $slot->getSlotTime()->format('H:i:s') ){
         
                     $entityManager= $this->getDoctrine()->getManager();
                     $entityManager->remove($slot);
@@ -305,6 +305,12 @@ public function delete(Request $request,$id){
                                 'status' => 400,
                                 'message' => "Unable to delete the previous day's slots"
                             ]));
+                    else if($previousHours){
+                            $response->setContent(json_encode([
+                                'status' => 400,
+                                'message' => "Please dont delete previous hours slot. Don't even think about it!!"
+                            ]));
+                    }
                     else
                             $response->setContent(json_encode([
                                 'status' => 400,

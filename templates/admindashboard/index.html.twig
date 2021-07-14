@@ -379,7 +379,7 @@
 });
 
 		
-	var slotsData=[]
+	var slots=[]
 	var entryIds=[]
 	const entryElements =document.querySelectorAll('[data-entry-info]');
 	// Map over each element and extract the data value
@@ -476,7 +476,6 @@
 			return {
 				month: '',
 				year: '',
-				slots: [],
 				no_of_days: [],
 				blankdays: [],
 				no_of_booked_slots: 0,
@@ -551,11 +550,13 @@
 					  var server=await response.json()
 						if(server.status === 200){
 					 		console.log(server.message)	
-							this.refreshTableBody()
-							this.newSlotData()
-							setTimeout(() => {
-								
-								 this.showSlots() }, 200);
+							
+							const app= this
+							Promise.resolve(server).then(function() {
+								app.refreshTableBody()
+								app.newSlotData()
+								console.log('hello')
+						    })
 							
 						}
 						if(server.status === 400){
@@ -584,9 +585,17 @@
 											method: 'GET'
 
 							})
-					slots=await response.json()
-					
-					console.table(slots)			
+								if (response.ok) {
+									const jsonValue = await response.json(); // Get JSON value from the response body
+									const app= this
+									Promise.resolve(jsonValue).then(function() {
+									slots=jsonValue
+									app.showSlots()
+									})
+								} else {
+									return Promise.reject('*** PHP file not found');
+								}
+						
 	            },
 				
 				getSlots(day){
@@ -620,11 +629,7 @@
 					this.event_day=date;
 					this.newSlotData()
 					this.refreshTableBody()
-					setTimeout(() => {
-								
-					 this.showSlots() }, 500);
-					
-					
+					 
 				},
 
 				addEvent() {
@@ -687,7 +692,6 @@
 						
 						slots.forEach((slot, index) => { 
 							
-								console.log(element)
 								var row = element.insertRow(0);
 									var cell1 = row.insertCell(0);
 										cell1.className="px-6 py-4"
