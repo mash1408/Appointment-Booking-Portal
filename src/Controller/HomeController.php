@@ -52,7 +52,10 @@ class HomeController extends AbstractController
             'Haircut' => 'Haircut',
             'Shaving' => 'Shaving',
             'Massage' => 'Massage',
-            'Trimming' => 'Trimming',
+            'Waxing' => 'Waxing',
+            'Pedicure' => 'Pedicure',
+            'Manicure' => 'Manicure',
+            'Tanning' => 'Tanning',
             'Facial' => 'Facial',
             ],'label' => 'Select your service:',])
         ->add('id', IntegerType::class)
@@ -130,6 +133,11 @@ class HomeController extends AbstractController
                 'Haircut' => 'Haircut',
                 'Shaving' => 'Shaving',
                 'Massage' => 'Massage',
+                'Waxing' => 'Waxing',
+                'Pedicure' => 'Pedicure',
+                'Manicure' => 'Manicure',
+                'Tanning' => 'Tanning',
+                'Facial' => 'Facial',
             ],
             'label' => 'Select a category',])
             ->add('userid', IntegerType::class)

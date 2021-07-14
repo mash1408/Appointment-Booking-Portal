@@ -32,6 +32,10 @@ class Review
      */
     private $category;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $reply;
    
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
@@ -85,17 +89,17 @@ class Review
         return $this;
     }
 
-    // public function getReply(): ?string
-    // {
-    //     return $this->reply;
-    // }
+    public function getReply(): ?string
+    {
+        return $this->reply;
+    }
 
-    // public function setReply(string $reply): self
-    // {
-    //     $this->reply = $reply;
+    public function setReply(string $reply): self
+    {
+        $this->reply = $reply;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     public function getUser(): ?User
     {
