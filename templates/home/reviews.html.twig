@@ -14,7 +14,7 @@
 
 {% block body %}
 {% include 'navbar.html.twig' %}
- <button class="modal-open bg-transparent border border-gray-500 hover:border-indigo-500 text-gray-500 hover:text-indigo-500 font-bold py-2 px-4 rounded-full">Write a review</button>
+ <button class="modal-open bg-transparent border mt-6 ml-6 bg-green-100 hover:bg-black  border-gray-500 hover:border-green-500 text-gray-500 hover:text-white font-bold py-2 px-4 rounded-full mb-8">Write a review</button>
 
   <!--Modal-->
   <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
@@ -23,54 +23,60 @@
     <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
       
       <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
-        <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+        <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
           <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
         </svg>
         <span class="text-sm">(Esc)</span>
       </div>
 
       <!-- Add margin if you want to see some of the overlay behind the modal-->
-      <div class="modal-content py-4 text-left px-6">
+      <div class="modal-content py-4 text-left px-6 bg-gray-800">
         <!--Title-->
         <div class="flex justify-between items-center pb-3">
           <div class="modal-close cursor-pointer z-50">
-            <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+            <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
               <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
             </svg>
           </div>
         </div>
 
             <!--Modal Body-->
-            <div>
+            <div class="p-2 text-white">
                 <span id="1star" class="fa fa-star fa-2x text-yellow-500"></span>
                 <span id="2star" class="fa fa-star fa-2x text-gray-500"></span>
                 <span id="3star" class="fa fa-star fa-2x text-gray-500"></span>
                 <span id="4star" class="fa fa-star fa-2x text-gray-500"></span>
                 <span id="5star" class="fa fa-star fa-2x text-gray-500"></span>
+                <br>
+                <br>
 
                 {{ form_start(review_form) }}
                 {{ form_widget(review_form.rating, { 'attr': {'value': 1, 'hidden': true} }) }}
 
+                 <div class="p-2 text-white mb-8">
                 {{ form_label(review_form.category) }}
-                {{ form_widget(review_form.category) }}
-
-                {{ form_widget(review_form.comment, { 'attr': { 'placeholder': 'Tell us about your experience'} }) }}
-
+                {{ form_widget(review_form.category, { 'attr': {'class': 'text-black ml-4 p-1'} }) }}
+                  </div>
+                  <div>
+                {{ form_widget(review_form.comment, { 'attr': { 'placeholder': 'Tell us about your experience', 'class' : 'p-2 w-96 h-80 mb-4 text-black'} }) }}
+</div>
                 {{ form_widget(review_form.userid, { 'attr': {'value': app.user.id, 'hidden': true} }) }}
 
-                {{ form_end(review_form) }}
+                {{ form_end(review_form, { 'attr': {'class' : 'p-2 rounded bg-gray-400 hover:bg-black hover:text-white transition-all duration-500 font-display focus:outline-none'} }) }}
             </div>  
       </div>
     </div>
   </div>
 
   {% for rating in ratings %}
-    <div>
-        <span>{{rating[1]}}</span>
+  <div class="ml-8 mb-8 p-2 rounded bg-gray-800 shadow-2xl w-96 text-white">
+    <div class="p-2">
+    <p class="flex justify-center  mb-4"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path></svg></p>
+        <span class="uppercase">{{rating[1]}}</span>
         <span>{{rating[2]|date("F jS g:ia") }}</span>
     </div>
 
-    <div>
+    <div class="p-2">
     {% if rating[3] == 1 %}
         <div>
             <span id="1star" class="fa fa-star  text-yellow-500"></span>
@@ -118,9 +124,10 @@
     {% endif %}
     </div>
 
-    <p>{{rating[4]}}</p>
-    <p>{{rating[5]}}</p>
-    <p>{{rating[6]}}</p>
+    <p class="p-2">{{rating[4]}}</p>
+    <p class="p-2">{{rating[5]}}</p>
+    <p class="p-2">{{rating[6]}}</p>
+    </div>
   {% endfor %}
 {% endblock %}
 
