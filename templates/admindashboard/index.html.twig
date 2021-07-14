@@ -294,61 +294,17 @@
 												Customer Name
 											</th>
 											<th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+												Category Booked
+											</th>
+											<th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
 												Phone Number
 											</th>
 											</tr>
 										</thead>
 										
-											{# {% for slot in slots %}
-												<template x-if="{{slot.slotdate| date('d')}} == event_day && (month+1) == {{slot.slotdate| date('m')}}">
-													 #}
-														<tbody id ="slots" class="bg-white divide-y divide-gray-200">
-															 {# <tr>
-																<td class="px-6 py-4">
-																	<div class="flex items-center">
-																		<div class="ml-4">
-																			<div class=" font-xs text-gray-900">
-																			{{slot.slottime|date('H:i:s')}}
-																			</div>
-																		</div>
-																	</div>
-																</td>
-																<td class="px-6 py-4">
-																	<button type="button" class="bg-gray-800 hover:bg-gray-700 
-																		text-white font-semibold py-2 px-4 border border-gray-700
-																		rounded-lg shadow-sm" @click="deleteSlot({{ slot.id }})">
-																		Delete
-																	</button>
-																</td>
-																{% if slot.booked is same as("0") %}
-																	<td class="px-6 py-4 ">
-																		<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-																			Not Booked
-																		</span>
-																	</td>
-																{% endif %}
-																{% if slot.booked is same as("1") %}
-																	<td class="px-6 py-4">
-																		<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-																			Booked
-																		</span>
-																	</td>
-																{% endif %}
-																<td class="px-6 py-4">
-																	<div class="flex items-center">
-																		<div class="ml-4">
-																			<div class=" font-xs text-gray-900">
-																			{{customer.name}}
-																			</div>
-																		</div>
-																	</div>
-																</td>
-																<td class="px-6 py-4">
-																	<div class="flex items-center">
-																		<div class="ml-4">
-																			<div class=" font-xs text-gray-900">
-																			{{customer.phone}} #}
- 					</tbody>
+										<tbody id ="slots" class="bg-white divide-y divide-gray-200">
+															
+ 										</tbody>
 											
 									</table>		
 								</div>
@@ -559,17 +515,18 @@
 						    })
 							
 						}
-						if(server.status === 400){
-							alert(server.message)
-							return false
+						else{
+								if(server.status === 400){
+									alert(server.message)
+									return false
 
-						}
-						if(server.status === 300){
-							alert(server.message)
-							return false
+								}
+								if(server.status === 300){
+									alert(server.message)
+									return false
 
+								}
 						}
-					
 					}	catch(error){
 						alert('something went wrong')
 						console.log(error)
@@ -590,6 +547,7 @@
 									const app= this
 									Promise.resolve(jsonValue).then(function() {
 									slots=jsonValue
+									console.table(slots)
 									app.showSlots()
 									})
 								} else {
@@ -692,7 +650,7 @@
 						
 						slots.forEach((slot, index) => { 
 							
-								var row = element.insertRow(0);
+								var row = element.insertRow(index);
 									var cell1 = row.insertCell(0);
 										cell1.className="px-6 py-4"
 										var newDiv = document.createElement("div");
@@ -736,15 +694,22 @@
 											cell4.className="px-6 py-4"
 											var user = document.createElement("SPAN");
 												user.className="font-xs text-gray-900"
-													user.innerHTML=slot.user
+													if(slot.user)
+														user.innerHTML=slot.user.toString()
+													else
+														user.innerHTML="---u-"
 												cell4.appendChild(user)
 											
-										var cell5= row.insertCell(4);
+										var cell5= row.insertCell(3);
 											cell5.className="px-6 py-4"
-											var user = document.createElement("SPAN");
-												user.className="font-xs text-gray-900"
-													user.innerHTML=slot.category
-												cell5.appendChild(user)
+											var category = document.createElement("SPAN");
+												category.className="font-xs text-gray-900"
+													if(slot.category)
+														user.innerHTML=slot.category.toString()
+													else
+														user.innerHTML="----c"
+												cell5.appendChild(category)
+										
 														
 
 							

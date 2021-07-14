@@ -243,12 +243,14 @@ public function getSlots(Request $request,$date='date'){
     $slotArray =  array();
     
     foreach ($slots as $slot) {
-        if($slot->getUser() == NULL)
+        if($slot->getUser() == NULL){
             $userid= NULL;
-        else
-        $userid = $slot->getUser()->getName();
-       
-  
+            $userNumber=NULL;
+        }
+        else{
+            $userid = $slot->getUser()->getName();
+            $userNumber = $slot->getUser()->getPhone();
+        }
         $object = (object) [
             'id' => $slot->getId(),
             'booked' => $slot->getBooked(),
@@ -256,6 +258,7 @@ public function getSlots(Request $request,$date='date'){
             'slottime' => $slot->getSlotTime()->format('H:i:s'),
             'category' => $slot->getCategory(),
             'user' => $userid,
+            'phoneNumber' => $userNumber
     ];
         array_push($slotArray,$object);
     }
