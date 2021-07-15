@@ -190,7 +190,7 @@ class AdmindashboardController extends AbstractController
         ////////////////////////////
        
     }
-    //get all the slots from db
+    //get all the slots and reviews from db
     $slots=$this->getDoctrine()->getRepository(Slot::class)->findAll();
     $reviews=$this->getDoctrine()->getRepository(Review::class)->findAll();
     $slotArray =  array();
