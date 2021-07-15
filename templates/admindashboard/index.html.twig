@@ -51,15 +51,16 @@
 						x-transition:leave-start="scale-100"
 						x-transition:leave-end="scale-0"
 						>
-						<header class="flex justify-center ">
-							<h2 class="font-sans font-semibold text-3xl text-gray-900">User Reviews</h2>
-							<button class="focus:outline-none p-2 " @click="showModal2 = false">
+						<header class="bg-white rounded-t-xl">
+						<button class="focus:outline-none p-2 " @click="showModal2 = false">
 								<svg class="fill-current flex justify-end" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
 									<path
 									d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
 									></path>
 								</svg>
 							</button>
+							<h2 class="flex justify-center font-sans font-semibold text-3xl text-gray-900">User Reviews</h2>
+							
 						</header>
 						<main class="p-2 text-center ">
 							<div class="overflow-y-auto overflow-x-hidden h-80 ...">
@@ -164,7 +165,7 @@
                 SLOTS CALENDAR
 			</div>
 	<div x-data="{ showModal1: false}" :class="{'overflow-y-hidden': showModal1}">
-		<button class="justify-items-end bg-purple-500 md:rounded py-2 px-3 my-1 text-gray-300 font-semibold hover:text-white hover:bg-purple-700 " @click="showModal1 = true">
+		<button class="flex justify-end bg-purple-500 md:rounded py-2 px-3 my-1 text-gray-300 font-semibold hover:text-white hover:bg-purple-700 " @click="showModal1 = true">
 				Generate Slots
 		</button>
 		<!-- Modal1 -->
@@ -190,8 +191,7 @@
 						x-transition:leave-start="scale-100"
 						x-transition:leave-end="scale-0"
 						>
-						<header class="flex justify-center ">
-							<h2 class="font-sans font-semibold text-3xl text-gray-900">Slot Generation</h2>
+						<header class="bg-white rounded-t-xl">
 							<button class="focus:outline-none p-2 " @click="showModal1 = false">
 								<svg class="fill-current flex justify-end" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
 									<path
@@ -199,9 +199,11 @@
 									></path>
 								</svg>
 							</button>
+							<h2 class="flex justify-center font-sans font-semibold text-3xl text-gray-900">Slot Generation</h2>
+						
 						</header>
 						<main class="p-2 text-center ">
-							<div class="container mx-auto px-4 py-2 text-center ">
+							<div class="container mx-auto px-4 py-2 text-center rounded-d-xl ">
 									{{ form_start(adminslot, {'attr': {'novalidate': 'novalidate'}}) }}
 								<div class="container border-l-3 border-blue-600">
 									{{form_label(adminslot.start_date, 'Start Date')}}
