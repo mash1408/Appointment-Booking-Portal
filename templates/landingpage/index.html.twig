@@ -16,11 +16,17 @@
       "
     >
       <div class="w-full md:w-auto flex justify-center">
-        <a href="#" class="block text-center text-black text-lg no-underline">
-          <img
+        <a href="/" class="block text-center text-black text-lg no-underline">
+          {# <img
             src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0xMyA5aDlsLTE0IDE1IDMtOWgtOWwxNC0xNS0zIDl6bS04LjY5OSA1aDguMDg2bC0xLjk4NyA1Ljk2MyA5LjI5OS05Ljk2M2gtOC4wODZsMS45ODctNS45NjMtOS4yOTkgOS45NjN6Ii8+PC9zdmc+"
             alt="Main"
             class="w-10 h-auto"
+          /> #}
+          <img
+            src="https://svgshare.com/i/ZAF.svg"
+            alt="Main"
+            class="h-auto"
+            style="width:15vw"
           />
         </a>
       </div>
@@ -28,7 +34,7 @@
       <ul class="flex-1 flex justify-center md:justify-end list-reset z-50">
       {% if app.user %}
         {% if app.user.isAdmin() %}
-        <li class="ml-8 hidden md:inline">
+        <li class="ml-8 hidden md:inline" style="margin-top:-50px">
           <a
             href="/admindashboard"
             class=" z-50
@@ -44,7 +50,7 @@
             >Go to Dashboard</a
           >
         </li>
-        <li class="ml-8 hidden md:inline ">
+        <li class="ml-8 hidden md:inline" style="margin-top:-50px">
           <a
             href="/logout"
             class=" z-50
@@ -61,7 +67,7 @@
           >
         </li>
         {% else %}
-        <li class="ml-8 hidden md:inline">
+        <li class="ml-8 hidden md:inline" style="margin-top:-50px">
           <a
             href="/home"
             class=" z-50
@@ -77,7 +83,7 @@
             >Go to Dashboard</a
           >
         </li>
-        <li class="ml-8 hidden md:inline ">
+        <li class="ml-8 hidden md:inline" style="margin-top:-50px">
           <a
             href="/logout"
             class=" z-50
@@ -95,7 +101,7 @@
         </li>
         {% endif %}
       {% else %}
-        <li class="ml-8 hidden md:inline">
+        <li class="ml-8 hidden md:inline" style="margin-top:-50px">
           <a
             href="/login"
             class=" z-50
@@ -111,7 +117,7 @@
             >Login</a
           >
         </li>
-        <li class="ml-8 hidden md:inline ">
+        <li class="ml-8 hidden md:inline " style="margin-top:-50px">
           <a
             href="/register"
             class=" z-50
