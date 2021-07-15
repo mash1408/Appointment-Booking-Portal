@@ -5,43 +5,59 @@
 {% block body %}
 
 {% include 'navbar.html.twig' %}
+<div class="flex justify-center">
     {% if slots %}
-    <div class="container">
-        <div class="mt-10 flex justify-center">
+    <div class="container"> 
+        <div class="mt-2 py-3 flex justify-center items-center border-b-4">
         {% set dateTime = date(slots[0][1]) %}
-        <span class="day text-4xl font-bold m-1">Slots for </span>
-        <span class="day text-4xl font-bold m-1">{{ dateTime | date('d') }}</span>
-        <span class="month text-4xl font-bold m-1">{{ dateTime | date('F') }}</span>
-        <span class="year text-4xl font-bold m-1">{{ dateTime | date('Y') }}</span>
+        <span class="day text-2xl font-semibold m-1">Slots for </span>
+        <span class="day text-2xl font-semibold m-1">{{ dateTime | date('d') }}</span>
+        <span class="month text-2xl font-semibold m-1">{{ dateTime | date('F') }}</span>
+        <span class="year text-2xl font-semibold m-1">{{ dateTime | date('Y') }}</span>
         </div>
+      
+         <section class="body-font">
+         
+            <div class="container mb-10 mx-auto">
+             <div class="flex justify-start bg-gray-200 px-3 py-2 mb-12">
+             <label class="text-lg px-2 py-1 text-gray-700"for="filter"><i class="fa fa-filter fa-sm"></i> Filter slots by </label>
+            <select id="filter" class="form-select block border-2 border-gray-300 px-1 rounded-lg text-sm shadow focus:bg-gray-100 focus:border-gray-500">
+                <option id="show-all" selected>All</option>
+                <option id="show-available">Available</option>
+            </select>
+            </div>
 
-        <div class="flex justify-center mt-5">
-        <select id="filter" class="form-select mt-1 block border border-2 text-xl">
-            <option id="show-all" selected>Show all</option>
-            <option id="show-available">Show available</option>
-        </select>
-        </div>
-
-        
-         <section class="text-gray-600 body-font">
-            <div class="container px-5 py-24 mx-auto">
-                <div class="flex flex-wrap gap-5 -m-2 justify-center">
+                <div class="flex flex-wrap gap-8 m-14 justify-center">
         {% for slot in slots %}
+        {% set currentDate = date()|date('Y-m-d H:i:s', "Asia/Kolkata") %}
+        {% set todayDate = slot[1]~" "~slot[2] %}
+          {% set diff = date(currentDate).diff(date(todayDate)) %}
+          {% if diff.invert == 1%}
+              <div class="booked h-full bg-gray-400 text-white bg-white border-gray-200 border p-4 rounded-lg shadow-2xl">
+                <p class="text-xl font-semibold m-1 mb-4">Time: {{ slot[2] }}</p>
+                {# <a href="/book/{{slot[0]}}/{{app.user.id}}" class="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Book slot</a> #}
+                <p class="text-xl text-gray-300 font-semibold m-1">Unavailable</p>
+                {# <button data-id="{{ slot[0] }}" class="book-slot" value={{ slot[0] }}>Book Slot</button> #}
+            </div>
+            {% endif %}
+
+        {% if diff.invert == 0 %}
          {% if slot[3] == 0 %}
         <div class="all h-full bg-green-400 text-white bg-white border-gray-200 border p-4 rounded-lg shadow-2xl">
-                <p class="text-2xl font-semibold m-1 mb-5">Time: {{ slot[2] }}</p>
+                <p class="text-xl font-semibold m-1">Time: {{ slot[2] }}</p>
                 {# <a href="/book/{{slot[0]}}/{{app.user.id}}" class="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Book slot</a> #}
-                <button value={{ slot[0] }} class="modal-open book-slot mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Book slot</button>
+                <button value={{ slot[0] }} class="modal-open book-slot mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Book slot</button>
                 {# <button data-id="{{ slot[0] }}" class="book-slot" value={{ slot[0] }}>Book Slot</button> #}
         </div>
         {% endif %}
 
         {% if slot[3] == 1 %}
         <div class="booked h-full bg-red-500 text-white border-gray-200 border p-4 rounded-lg shadow-2xl">
-                <p class="text-2xl font-semibold m-1">Time: {{ slot[2] }}</p>
-                <p class="text-2xl text-gray-300 font-semibold m-1">Booked</p>
+                <p class="text-xl font-semibold m-1 mb-4">Time: {{ slot[2] }}</p>
+                <p class="text-xl text-gray-300 font-semibold m-1">Booked</p>
                 {# <button data-id="{{ slot[0] }}" class="book-slot" value={{ slot[0] }}>Book Slot</button> #}
         </div>
+        {% endif %}
         {% endif %}
 
         {% endfor %}
@@ -57,6 +73,7 @@
             <a href="/home" class="mt-5 px-3 py-1 bg-green-500 text-white hover:bg-green-600 rounded text-lg">Pick another date</a>
         </div>
     {% endif %}
+  </div>
 
 <!--Slot Booking Modal-->
 <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
@@ -159,13 +176,13 @@
     }
 
     document.getElementById("filter").addEventListener("change",function(event) {
-        if(event.target.value == "Show all"){
+        if(event.target.value == "All"){
             //console.log(document.getElementById("all"));
             for(let i=0; i< document.querySelectorAll(".booked").length; i++){
                 document.querySelectorAll(".booked")[i].style.display = 'block';
             }
         }
-        if(event.target.value == "Show available"){
+        if(event.target.value == "Available"){
             for(let i=0; i< document.querySelectorAll(".booked").length; i++){
                 document.querySelectorAll(".booked")[i].style.display = 'none';
             }
