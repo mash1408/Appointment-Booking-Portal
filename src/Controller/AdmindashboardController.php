@@ -203,10 +203,12 @@ class AdmindashboardController extends AbstractController
        
         $object = (object) [
             'id' => $review->getId(),
-            'comments' => $review->getId(),
-            'user' => $review->getId(),
+            'comments' => $review->getComment(),
+            'user' => $review->getUser()->getName(),
             'rating' => $review->getRating(),
             'comment_time' => $review->getCommentedAt()->format('Y-m-d H:i:s'),
+            'category' => $review->getCategory(),
+            'reply' => $review->getReply(),
             
     ];
         array_push($reviewArray,$object);

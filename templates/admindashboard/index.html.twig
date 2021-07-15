@@ -83,7 +83,7 @@
 															Category 
 														</th>
 														<th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-															Reply
+															Reply 
 														</th>
 														<th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
 															Time
@@ -92,36 +92,42 @@
 													</thead>
 
 													<tbody class="bg-white divide-y divide-gray-200">
-													<tr>
-														<td class="px-6 py-4 whitespace-nowrap">
-															<div class="text-sm font-medium text-gray-900">
-																		Jane Cooper
-															</div>
-														</td>
-														
-														<td class="px-6 py-4 whitespace-nowrap">
-															<div class="text-sm text-gray-900">
-															Regional Paradigm Technician
-															</div>
-														</td>
-														<td class="px-6 py-4 whitespace-nowrap">
-															<div class="text-sm text-gray-900">
-															Regional Paradigm Technician
-															</div>
-														</td>
-														<td class="px-6 py-4 whitespace-nowrap">
-															<div class="text-sm text-gray-900">
-															Regional Paradigm Technician
-															</div>
-														</td>
-														<td class="px-6 py-4 whitespace-nowrap">
-															<div class="text-sm text-gray-900">
-															Regional Paradigm Technician
-															</div>
-														</td>
-														</tr>
-
-												</tbody>
+															{% for review in reviews %}
+															<tr>
+																<td class="px-6 py-4 whitespace-nowrap">
+																	<div class="text-sm font-medium text-gray-900">
+																	{{ review.user }}
+																	</div>
+																</td>
+																
+																<td class="px-6 py-4 whitespace-nowrap">
+																	<div class="text-sm text-gray-900">
+																	{{ review.rating }}
+																	</div>
+																</td>
+																<td class="px-6 py-4 whitespace-nowrap">
+																	<div class="text-sm text-gray-900">
+																	{{ review.comments }}
+																	</div>
+																</td>
+																<td class="px-6 py-4 whitespace-nowrap">
+																	<div class="text-sm text-gray-900">
+																	{{ review.category }}
+																	</div>
+																</td>
+																<td class="px-6 py-4 whitespace-nowrap">
+																	<div class="text-sm text-gray-900">
+																	{{ review.reply }}
+																	</div>
+																</td>
+																<td class="px-6 py-4 whitespace-nowrap">
+																	<div class="text-sm text-gray-900">
+																	{{ review.comment_time }}
+																	</div>
+																</td>
+																</tr>
+															{% endfor %}
+													</tbody>
 												</table>		
 											</div>
 										</div>
