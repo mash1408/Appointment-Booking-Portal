@@ -31,13 +31,14 @@
 			<div class="rounded-lg shadow overflow-hidden mt-5 border">
 
 				<div class="flex items-center justify-between py-2 px-6">
-				<div>
-					<p class="text-lg text-gray-600">Select a date to view slots for that day</p>
-				</div>
+						<div>
+							<p class="text-lg text-gray-600">Select a date to view slots for that day</p>
+						</div>
 					<div>
 						<span x-text="MONTH_NAMES[month]" class="text-lg font-bold text-gray-800"></span>
 						<span x-text="year" class="ml-1 text-lg text-gray-600 font-normal"></span>
 					</div>
+
 				 	<div class="border rounded-lg px-1" style="padding-top: 2px;">
 						<button 
 							type="button"
@@ -59,9 +60,9 @@
 							<svg class="h-6 w-6 text-gray-500 inline-flex leading-none"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
 							</svg>									  
-						</button>
+						</button>						
 					</div>
-
+					
 				</div>	
 
 				<div class="-mx-1 -mb-1">
@@ -75,7 +76,7 @@
 						</template>
 					</div>
 
-					<div id="date-square" class="flex flex-wrap border-t border-l">
+					<div class="flex flex-wrap border-t border-l">
 						<template x-for="blankday in blankdays">
 							<div 
 								style="width: 14.28%; height: 120px"
@@ -83,36 +84,41 @@
 							></div>
 						</template>	
 						<template x-for="(date, dateIndex) in no_of_days" :key="dateIndex">	
-							<div style="width: 14.28%; height: 120px" class="px-4 pt-2 border-r border-b relative">
+
+							<div style="width: 14.28%; height: 120px"  class=" px-4 pt-2 border-r border-b relative transition ease-in-out duration-100 delay-100">
+					
+							{# <div style="width: 14.28%; height: 120px" class="px-4 pt-2 border-r border-b relative"> #}
 								<div
 									@click="showEventModal(date.day)"
 									x-text="date.day"
 									class="inline-flex w-6 h-6 items-center justify-center cursor-pointer text-center leading-none rounded-full transition ease-in-out duration-100"
-									:class="{'bg-blue-500 text-white': isToday(date.day) == true, 'text-gray-700 hover:bg-blue-200': isToday(date.day) == false}"	
+									:class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }"	
 								></div>
 
 
-
+	<div style="height: 80px;" class="mt-1 " 
+								x-show="!(date.booked === 0 && date.unbooked === 0)">
 				<div style="height: 80px;" class="overflow-y-auto mt-1" >
 						
 									<div 
 										class="absolute top-0 right-10 mt-2 mr-2 inline-flex 
 										items-center justify-center rounded-full text-sm w-6 h-6  
 										 leading-none"
-										 x-text="getSlotsUnBooked(date.day)"
-										style="border: 2px solid #73AD21;"
+										 x-text="getSlotsBooked(date.day)"
+										style="border: 2px solid red;"
 										
 										></div>
 						
 										<div 
-										style="border: 2px solid red;"
-										x-text="getSlotsBooked(date.day)"
+										style="border: 2px solid #73AD21;"
+										x-text="getSlotsUnBooked(date.day)"
 										class="absolute top-0 right-0 mt-2 mr-2 inline-flex items-center 
 										justify-center rounded-full text-sm w-6 h-6  
 										 leading-none"
 										>
 						</div>
 
+</div>
 </div>
 
 
@@ -149,7 +155,7 @@
 		</div>
 
 
-		 <!-- Modal -->
+		<!-- Modal -->
 		<div style=" background-color: rgba(0, 0, 0, 0.8)" class="fixed z-40 top-0 right-0 left-0 bottom-0 h-full w-full" x-show.transition.opacity="openEventModal">
 			<div class="p-4 max-w-xl mx-auto relative absolute left-0 right-0 overflow-hidden mt-24">
 				<div class="shadow absolute right-0 top-0 w-10 h-10 rounded-full bg-white text-gray-500 hover:text-gray-800 inline-flex items-center justify-center cursor-pointer"
@@ -159,7 +165,6 @@
 							d="M16.192 6.344L11.949 10.586 7.707 6.344 6.293 7.758 10.535 12 6.293 16.242 7.707 17.656 11.949 13.414 16.192 17.656 17.606 16.242 13.364 12 17.606 7.758z" />
 					</svg>
 				</div>
-
 				<div class="shadow w-full rounded-lg bg-white overflow-hidden w-full block p-8 flex justify-center">
 					
 					<div class="p-1">
@@ -168,23 +173,18 @@
 					{{ form_widget(form.save, {'attr': {'class': 'relative left-0 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'}}) }}
 					{{ form_end(form) }}
 					</div>
+					
 				</div>
 			</div>
-		</div> 
+		</div>
 		<!-- /Modal -->
 
 		{# {{ form_start(form) }} #}
         {# {{ form_widget(form) }}
         {{ form_end(form) }} #}
-		
 	</div>
 
 	<script>
-
-
-
-
-
     
         var entryIds=[]
 					 const entryElements =
@@ -195,9 +195,7 @@
 						Array.from(entryElements).map(
 							item => JSON.parse(item.dataset.entryInfo)
 						);
-
                         
-
 function	getSlotsBooked(day){
 				
 					var slotsBooked=0
@@ -217,14 +215,8 @@ function	getSlotsBooked(day){
 					 } )
                      return slotsUnBooked
                     }
-
-
-
-
-
 		const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
 		function app() {
 			let currentDate = new Date()
             document.getElementById("form_slotDate_year").value = currentDate.getFullYear();
@@ -237,20 +229,17 @@ function	getSlotsBooked(day){
 				no_of_days: [],
 				blankdays: [],
 				days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-
 				events: [
 					{
 						event_date: new Date(2021, 3, 1),
 						event_title: "April Fool's Day",
 						event_theme: 'blue'
 					},
-
 					{
 						event_date: new Date(2021, 3, 10),
 						event_title: "Birthday",
 						event_theme: 'red'
 					},
-
 					{
 						event_date: new Date(2021, 3, 16),
 						event_title: "Upcoming Event",
@@ -260,7 +249,6 @@ function	getSlotsBooked(day){
 				event_title: '',
 				event_date: '',
 				event_theme: 'blue',
-
 				themes: [
 					{
 						value: "blue",
@@ -283,34 +271,18 @@ function	getSlotsBooked(day){
 						label: "Purple Theme"
 					}
 				],
-
 				openEventModal: false,
-
 				initDate() {
 					let today = new Date();
 					this.month = today.getMonth();
 					this.year = today.getFullYear();
 					this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString();
 				},
-
 				isToday(date) {
 					const today = new Date();
 					const d = new Date(this.year, this.month, date);
-
 					return today.toDateString() === d.toDateString() ? true : false;
 				},
-				/*isPast(date){
-					const d1 = new Date();
-					const d2 = new Date(this.year, this.month, date);
-					const diffTime = (d2 - d1);
-					const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-					//console.log(diffDays);
-
-					if(diffDays < 0){
-						return true;
-					}
-				},*/
-
 				showEventModal(date) {
 					// open the modal
 					this.openEventModal = true;
@@ -318,36 +290,43 @@ function	getSlotsBooked(day){
                     document.getElementById("form_slotDate_year").value = this.event_date.getFullYear();
                     document.getElementById("form_slotDate_month").value = this.event_date.getMonth()+1;
                     document.getElementById("form_slotDate_day").value = this.event_date.getDate();
-
 					document.getElementById("form_save").innerHTML = "View slots for "+MONTH_NAMES[this.event_date.getMonth()]+" "+this.event_date.getDate()+" "+this.event_date.getFullYear();
 				},
-
 				addEvent() {
 					if (this.event_title == '') {
 						return;
 					}
-
 					this.events.push({
 						event_date: this.event_date,
 						event_title: this.event_title,
 						event_theme: this.event_theme
 					});
-
-					//console.log(this.events);
-
+					console.log(this.events);
 					// clear the form data
 					this.event_title = '';
 					this.event_date = '';
 					this.event_theme = 'blue';
-
 					//close the modal
 					this.openEventModal = false;
 				},
-
+				getSlots(day){
+				
+					var slotsBooked=0
+					var slotsUnBooked=0
+					entryIds.forEach((element) => { 
+						if(parseInt(element.dateDay) === day  && parseInt(element.dateMonth) === (this.month+1) && parseInt(element.booked))
+							slotsBooked+=1
+						else if(parseInt(element.dateDay) === day  && parseInt(element.dateMonth) === (this.month+1) && !parseInt(element.booked))
+							slotsUnBooked+=1
+							
+					 } )
+					this.no_of_booked_slots=slotsBooked
+					this.no_of_unbooked_slots=slotsUnBooked 
+					return slotsBooked
+				},
 				
 					getNoOfDays() {
 					let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
-
 					// find where to start calendar day of week
 					let dayOfWeek = new Date(this.year, this.month).getDay();
 					let blankdaysArray = [];
@@ -362,7 +341,7 @@ function	getSlotsBooked(day){
 						daysArray['openEventPopup']=false;
 						this.no_of_days.push(daysArray);
 					}
-					//console.log(JSON.stringify(this.no_of_days))
+					console.log(JSON.stringify(this.no_of_days))
 					this.blankdays = blankdaysArray;
 					
 				}
