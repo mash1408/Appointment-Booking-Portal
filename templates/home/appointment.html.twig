@@ -3,18 +3,86 @@
 {% block title %}Appointments{% endblock %}
 
 {% block body %}
+{% include 'navbar.html.twig' %}
+<h3 class="text-xl font-semibold p-3 border-b-2">My Appointments</h3>
+<div class="flex flex-col mt-5">
+  <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+      <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Date
+              </th>
+              <th scope="col" class="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Time
+              </th>
+              <th scope="col" class="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Category
+              </th>
+              <th scope="col" class="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
+              <th scope="col" class="text-center relative px-6 py-3">
+                <span class="sr-only">Edit</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+           {% set currentDate = date()|date('Y-m-d H:i:s', "Asia/Kolkata") %}
+          {% for slot in slots %}    
+            <tr class="">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-center text-sm text-gray-900">{{ slot[2] | date('d F Y') }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <div class="text-center text-sm text-gray-900">{{ slot[3] }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex justify-center items-center">
+                  <div>{{ slot[1] }}</div>
+                  </div>
+                </div>
+              </td>
+              {% set todayDate = slot[2]~" "~slot[3] %}
+               {% set diff = date(currentDate).diff(date(todayDate)) %}
+              <td class="px-6 py-4 whitespace-nowrap flex justify-center items-center">
+               {% if diff.invert == 0 %}
+               {% if diff.y == 0 and diff.m == 0 and diff.d == 0 and diff.h == 0 and diff.i < 15 %}
+                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-300 text-gray-700">
+                  Starting soon
+                </span>
+                {% endif %}
+                
+                {% if  diff.y > 0 or diff.m > 0 or diff.d > 0 or diff.h > 0 or diff.i > 15 %}
+                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-300 text-gray-700">
+                  Upcoming
+                </span>
+                {% endif %}
+                {% endif %}
 
-<h1>hello! {{userid.name}}</h1>
-<h2>Your Details</h2><br>
+                {% if diff.invert == 1 %}
+                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semi-bold rounded-full bg-green-300 text-gray-700">
+                Completed
+                </span>
+                {% endif %}
+              </td>
+              {% if diff.invert == 0 and (diff.y > 0 or diff.m > 0 or diff.d > 0 or diff.h > 0 or diff.i > 15) %}
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                <a href="cancel/{{slot[0]}}" class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600">Cancel Appointment</a>
+              </td>
+              {% endif %}
+            </tr>
+            {% endfor %}
 
-
-   Email:{{userid.email}}<br>
-   Phone:{{userid.phone}}<br><br>
-
-<h2>Booking Details</h2>
-
-   
-
+            <!-- More people... -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 

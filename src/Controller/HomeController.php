@@ -177,30 +177,56 @@ class HomeController extends AbstractController
     }
     
          
-    #[Route('/appointment/{userid}', name: 'appointment')]
-    public function appointment(Request $request,$userid)
-    /**
-     * @Route("/home/appointment/{$userid}", name="appointment")
-     */
- {
-     
-     $userid =$this->getDoctrine()
-     ->getRepository(user::class)
-     ->findOneBy(['id' => $userid]);
+    #[Route('/appointments', name:'appointment')]
+    public function appointment(Request $request):Response
+      {
+       $user = $this->getUser();
+       $userid = $this->getUser()->getId();
+     //dd($user);
+       $slots=$this->getDoctrine()
+       ->getRepository(Slot::class)
 
-    //  $slots =$this->getDoctrine()
-    //  ->getRepository(slot::class)
-    //  ->findOneBy(['id' => $slotid]);
+       ->findBy(['user' => $user]);
+      //  dd($slots[0]->getId());
+        //dd($slots);
 
-    //  $entityManager = $this->getDoctrine()->getManager();
-    //  $slotid=$entityManager ->getRepository(Slot::class)
-    //                         ->findOneBy(['id'=> $slotid]);
 
-     //  return new Response('username:',$userid->getUsername($userid));
-    // $slots = $entityManager->getRepository(Slot::class)->find($slotid);
-           
- 
-    return $this->render('home/appointment.html.twig',['userid'=> $userid]);
- }
+
+    $slotArray = [];
+    foreach ($slots as $slot) {
+        //$user = $slot->getUser()->getId();
+        array_push($slotArray, [ $slot->getId(),$slot->getCategory(),$slot->getSlotDate()->format('Y-m-d'),$slot->getSlotTime()->format('H:i'),  $slot->getBooked()]);
+    }
+//        dd($slotArray);
+    return $this->render('home/appointment.html.twig',['slots'=> $slotArray]);
+
+    }
+
+    #[Route('/cancel/{slotid}', name:'cancel-appointment')]
+    public function cancelAppointment(Request $request, $slotid): Response
+    {
+        $slot=$this->getDoctrine()
+       ->getRepository(Slot::class) 
+       ->find(['id' => $slotid]);
+        
+       date_default_timezone_set('Asia/Kolkata');
+       $date = $slot->getSlotDate()->format('Y-m-d');
+       $time = $slot->getSlotTime()->format('H:i:s');
+       $datetime = $date." ".$time;
+       $diff = date_diff(new \DateTime(), \DateTime::createFromFormat('Y-m-d H:i:s', $datetime));
+        if($diff->invert == 0 && ($diff->y > 0 || $diff->m > 0 || $diff->d > 0 || $diff->h > 0 || $diff->i > 15)){
+            $entityManager = $this->getDoctrine()->getManager();
+            $slot = $entityManager->getRepository(Slot::class)->find($slotid);
+            $slot->setUser(null);
+            $slot->setBooked("0");
+            $slot->setCategory(null);
+            $entityManager->persist($slot);
+            $entityManager->flush();
+            return $this->redirectToRoute("appointment");
+        }
+        else{
+            dd("Cannot cancel appointment");
+        }        
+    }
 
 }

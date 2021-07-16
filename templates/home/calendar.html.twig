@@ -28,7 +28,7 @@
 <div class="antialiased sans-serif w-screen h-screen">
 	<div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
 		<div class="container mx-auto px-4 py-2">
-			<div class="bg-white rounded-lg shadow overflow-hidden mt-5 border">
+			<div class="rounded-lg shadow overflow-hidden mt-5 border">
 
 				<div class="flex items-center justify-between py-2 px-6">
 				<div>
@@ -38,7 +38,7 @@
 						<span x-text="MONTH_NAMES[month]" class="text-lg font-bold text-gray-800"></span>
 						<span x-text="year" class="ml-1 text-lg text-gray-600 font-normal"></span>
 					</div>
-					<div class="border rounded-lg px-1" style="padding-top: 2px;">
+				 	<div class="border rounded-lg px-1" style="padding-top: 2px;">
 						<button 
 							type="button"
 							class="leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer focus:outline-none hover:bg-gray-200 p-1 items-center" 
