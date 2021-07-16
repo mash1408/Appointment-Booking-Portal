@@ -23,7 +23,7 @@ class HomeController extends AbstractController
     #[Route('/home', name: 'home')]
     public function calender(Request $request): Response
     {
-    
+
         $form = $this->createFormBuilder()
             ->add('slotDate', DateType::class)
             ->add('save', SubmitType::class, ['label' => 'View Slots'])
@@ -70,7 +70,7 @@ class HomeController extends AbstractController
             $slotid = $form["id"]->getData();
             $category = $form["category"]->getData();
 
-            
+
             $entityManager = $this->getDoctrine()->getManager();
             $slots = $entityManager->getRepository(Slot::class)->find($slotid);
             $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['id' => $userid]);
@@ -80,7 +80,7 @@ class HomeController extends AbstractController
             $slots->setUser($user);
             $entityManager->persist($slots);
             $entityManager->flush();
-            return $this->redirectToRoute('appointment');
+            
         }
         $dateobj =  \DateTime::createFromFormat("Y-m-d",$date);
         $slots = $this->getDoctrine()->getRepository(Slot::class)->findBy(['slot_date' => $dateobj]);
@@ -108,7 +108,7 @@ class HomeController extends AbstractController
     //     {
     //         $category = $form["category"]->getData();
 
-            
+
     //         $entityManager = $this->getDoctrine()->getManager();
     //         $slots = $entityManager->getRepository(Slot::class)->find($slotid);
     //         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['id' => $userid]);
@@ -123,10 +123,10 @@ class HomeController extends AbstractController
     //     }
     //     return $this->render('book/book.html.twig', ['booking_form' => $form->createView()]);
     // }
-    
+
     #[Route('/reviews', name: 'reviews')]
     public function showReviews(Request $request): Response
-    {   
+    {
         $form = $this->createFormBuilder()
             ->add('rating', IntegerType::class)
             ->add('comment', TextareaType::class)
@@ -176,8 +176,8 @@ class HomeController extends AbstractController
         }
         return $this->render('home/reviews.html.twig',['review_form'=> $form->createView(), 'ratings'=>$reviewsArray]);
     }
-    
-         
+
+
     #[Route('/appointments', name:'appointment')]
     public function appointment(Request $request):Response
       {
@@ -207,9 +207,9 @@ class HomeController extends AbstractController
     public function cancelAppointment(Request $request, $slotid): Response
     {
         $slot=$this->getDoctrine()
-       ->getRepository(Slot::class) 
+       ->getRepository(Slot::class)
        ->find(['id' => $slotid]);
-        
+
        date_default_timezone_set('Asia/Kolkata');
        $date = $slot->getSlotDate()->format('Y-m-d');
        $time = $slot->getSlotTime()->format('H:i:s');
@@ -227,7 +227,7 @@ class HomeController extends AbstractController
         }
         else{
             dd("Cannot cancel appointment");
-        }        
+        }
     }
 
 }

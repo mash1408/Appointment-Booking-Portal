@@ -4,6 +4,30 @@
 
 {% block body %}
 {% include 'navbar.html.twig' %}
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+
+ <body align="center">
+ <div class="white-900 h-10 w-20 mx-auto pl-80 pr-60">
+
+    </div>
+<div class="bg-gray-900 h-10 w-20 mx-auto pl-60 pr-60">
+
+   </div>
+
+   <img src="logo1.jpg" class="mx-auto rounded-full h-32 w-32 -mt-16 shadow-xl border-solid border-2 border-gray-300>
+   <div class="mx-auto max-w-lg">
+     <h1 class="pb-6 text-center text-3xl font-semibold tracking-tight">{{ app.user.name }}</h1>
+     <h1 class="pb-3 text-center text-1xl font-light">{{ app.user.email }}</h1>
+     <h1 class="pb-3 text-center text-1xl font-light">Ph: {{ app.user.phone }}</h2>
+
+
+   </div>
+   <div class="bg-gray-900 h-10 w-20 mx-auto pl-60 pr-60">
+   </div>
+   <div class="white-900 h-10 w-20 mx-auto pl-80 pr-60">
+
+      </div>
 <h3 class="text-xl font-semibold p-3 border-b-2">My Appointments</h3>
 <div class="flex flex-col mt-5">
   <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -31,7 +55,7 @@
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
            {% set currentDate = date()|date('Y-m-d H:i:s', "Asia/Kolkata") %}
-          {% for slot in slots %}    
+          {% for slot in slots %}
             <tr class="">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-center text-sm text-gray-900">{{ slot[2] | date('d F Y') }}</div>
@@ -54,7 +78,7 @@
                   Starting soon
                 </span>
                 {% endif %}
-                
+
                 {% if  diff.y > 0 or diff.m > 0 or diff.d > 0 or diff.h > 0 or diff.i > 15 %}
                 <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-300 text-gray-700">
                   Upcoming
