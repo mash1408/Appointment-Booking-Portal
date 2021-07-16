@@ -80,6 +80,7 @@ class HomeController extends AbstractController
             $slots->setUser($user);
             $entityManager->persist($slots);
             $entityManager->flush();
+            return $this->redirectToRoute('appointment');
         }
         $dateobj =  \DateTime::createFromFormat("Y-m-d",$date);
         $slots = $this->getDoctrine()->getRepository(Slot::class)->findBy(['slot_date' => $dateobj]);
